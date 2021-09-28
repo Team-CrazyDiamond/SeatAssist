@@ -1,7 +1,9 @@
 package com.example.seatassist.ui.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,23 +14,34 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.seatassist.SeatAssistScreen
+import com.example.seatassist.data.OffsetData
 import com.example.seatassist.ui.components.MainPlaceholder
+import kotlin.math.roundToInt
 
 @Composable
 fun MainScreen(
+    numberText: String,
     menu: List<String> = listOf("Number of seats", "Members", "Seats size"),
+    offsetList: List<OffsetData>,
     onMembersClick: () -> Unit,
-    onSizeClick: () -> Unit
+    onSizeClick: () -> Unit,
+    onEditNumber: (String) -> Unit,
+    onAddObject: (Int, Float, Float) -> Unit,
+    onMoveOffsetX: (Int, Float) -> Unit,
+    onMoveOffsetY: (Int, Float) -> Unit
 ) {
     BoxWithConstraints {
         val screenWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
@@ -40,13 +53,41 @@ fun MainScreen(
             val state = rememberScrollState()
             val stateValue = if (state.value <= screenHeight.value * 0.3) state.value else (screenHeight.value * 0.3).toInt()
 
-            Box(
-                modifier = Modifier
-                    .width(screenWidth)
-                    .height((screenHeight.value * 0.85F - stateValue).dp)
+            Surface(
+                contentColor = MaterialTheme.colors.primary
             ) {
-                // 操作画面をここに記述
+                Box(
+                    modifier = Modifier
+                        .width(screenWidth)
+                        .height((screenHeight.value * 0.85F - stateValue).dp)
+                        .clickable { onAddObject(offsetList.size, 0f, 0f) }
+                ) {
+                    // 操作画面をここに記述
+                    offsetList.forEach { offsetData ->
+                        DragBox(id = offsetData.id,
+                            offsetX = offsetData.offsetX.value,
+                            offsetY = offsetData.offsetY.value,
+                            onMoveOffsetX = onMoveOffsetX,
+                            onMoveOffsetY = onMoveOffsetY)
+                    }
+                }
             }
+
+//            Box(
+//                modifier = Modifier
+//                    .width(screenWidth)
+//                    .height((screenHeight.value * 0.85F - stateValue).dp)
+//                    .clickable { onAddObject(offsetList.size, 0f, 0f) }
+//            ) {
+//                // 操作画面をここに記述
+//                offsetList.forEach { offsetData ->
+//                    DragBox(id = offsetData.id,
+//                        offsetX = offsetData.offsetX.value,
+//                        offsetY = offsetData.offsetY.value,
+//                        onMoveOffsetX = onMoveOffsetX,
+//                        onMoveOffsetY = onMoveOffsetY)
+//                }
+//            }
 
             Surface(
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -75,7 +116,7 @@ fun MainScreen(
                         style = MaterialTheme.typography.caption,
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
                     )
-                    MainNumber(text = menu[0])
+                    MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
                     MainMenuItem(text = menu[1], onClick = onMembersClick)
                     MainMenuItem(text = menu[2], onClick = onSizeClick)
                     Spacer(modifier = Modifier.size(16.dp))
@@ -107,7 +148,7 @@ fun MainMenuItem(text: String, onClick: () -> Unit) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MainNumber(text: String = "Number of seats", mainViewModel: MainViewModel = MainViewModel()) {
+fun MainNumber(text: String = "Number of seats", numberText: String, onEditNumber: (String) -> Unit) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -121,8 +162,8 @@ fun MainNumber(text: String = "Number of seats", mainViewModel: MainViewModel = 
                 modifier = Modifier.padding(16.dp)
             )
             TextField(
-                value = mainViewModel.numberText,
-                onValueChange = { mainViewModel.numberText = it },
+                value = numberText,
+                onValueChange = { onEditNumber(it) },
                 placeholder = { MainPlaceholder(text = "Input text") },
                 textStyle = MaterialTheme.typography.h4.copy(
                     fontSize = 26.sp,
@@ -148,4 +189,29 @@ fun MainNumber(text: String = "Number of seats", mainViewModel: MainViewModel = 
                 .fillMaxWidth()
         )
     }
+}
+
+@Composable
+fun DragBox(
+    id: Int,
+    offsetX: Float,
+    offsetY: Float,
+    onMoveOffsetX: (Int, Float) -> Unit,
+    onMoveOffsetY: (Int, Float) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .offset { IntOffset(x = offsetX.roundToInt(), y = offsetY.roundToInt()) }
+            .background(color = Color.Black)
+            .size(50.dp)
+            .pointerInput(Unit) {
+                detectDragGestures { change, dragAmount ->
+                    change.consumeAllChanges()
+                    onMoveOffsetX(id, dragAmount.x)
+                    onMoveOffsetY(id, dragAmount.y)
+                }
+            }
+                .background(color = MaterialTheme.colors.primary.copy())
+        )
+
 }
