@@ -16,21 +16,25 @@ import com.example.seatassist.ui.size.SizeScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val mainViewModel = MainViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SeatAssistApp()
+            SeatAssistApp(mainViewModel = mainViewModel)
         }
     }
 }
 
 @Composable
-fun SeatAssistApp() {
+fun SeatAssistApp(mainViewModel: MainViewModel) {
     val navController = rememberNavController()
     SeatAssistTheme {
         SeatAssistNavHost(
             navController = navController,
-            modifier = Modifier
+            modifier = Modifier,
+            mainViewModel = mainViewModel
         )
     }
 }
@@ -38,7 +42,8 @@ fun SeatAssistApp() {
 @Composable
 fun SeatAssistNavHost(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    mainViewModel: MainViewModel
 ) {
     NavHost(
         navController = navController,
@@ -48,13 +53,26 @@ fun SeatAssistNavHost(
         composable(route = SeatAssistScreen.Main.name) {
             // Main Compose
             MainScreen(
+                numberText = mainViewModel.numberText.value,
+                offsetList = mainViewModel.offsetList,
+                onAddObject = mainViewModel::addObject,
+                onMoveOffsetX = mainViewModel::moveOffsetX,
+                onMoveOffsetY = mainViewModel::moveOffsetY,
                 onMembersClick = { navController.navigate(SeatAssistScreen.Members.name) },
-                onSizeClick = { navController.navigate(SeatAssistScreen.Size.name) }
+                onSizeClick = { navController.navigate(SeatAssistScreen.Size.name) },
+                onEditNumber = mainViewModel::editNumber
+
             )
         }
         composable(route = SeatAssistScreen.Members.name) {
             // Members Compose
-            MembersScreen()
+            MembersScreen(
+                numberText = mainViewModel.numberText.value,
+                membersList = mainViewModel.membersList,
+                onAddMember = mainViewModel::addMember,
+                onRemoveMember = mainViewModel::removeMember,
+                onEditName = mainViewModel::editName
+            )
         }
         composable(route = SeatAssistScreen.Size.name) {
             // Size Compose
