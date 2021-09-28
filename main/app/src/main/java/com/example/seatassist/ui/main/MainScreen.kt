@@ -10,7 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,18 +19,16 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.seatassist.SeatAssistScreen
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.ui.components.MainPlaceholder
 import kotlin.math.roundToInt
 
+/**
+
+ **/
 @Composable
 fun MainScreen(
     numberText: String,
@@ -51,7 +49,8 @@ fun MainScreen(
             modifier = Modifier.wrapContentHeight()
         ) {
             val state = rememberScrollState()
-            val stateValue = if (state.value <= screenHeight.value * 0.3) state.value else (screenHeight.value * 0.3).toInt()
+            val stateValue =
+                if (state.value <= screenHeight.value * 0.3) state.value else (screenHeight.value * 0.3).toInt()
 
             Surface(
                 contentColor = MaterialTheme.colors.primary
@@ -64,11 +63,13 @@ fun MainScreen(
                 ) {
                     // 操作画面をここに記述
                     offsetList.forEach { offsetData ->
-                        DragBox(id = offsetData.id,
+                        DragBox(
+                            id = offsetData.id,
                             offsetX = offsetData.offsetX.value,
                             offsetY = offsetData.offsetY.value,
                             onMoveOffsetX = onMoveOffsetX,
-                            onMoveOffsetY = onMoveOffsetY)
+                            onMoveOffsetY = onMoveOffsetY
+                        )
                     }
                 }
             }
@@ -108,13 +109,18 @@ fun MainScreen(
                         text = "Menu",
                         style = MaterialTheme.typography.h6,
                         fontSize = 34.sp,
-                        modifier = Modifier.padding(start = 16.dp, end =16.dp, top = 16.dp)
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
                     )
                     Text(
                         text = "Write the menu description here",
                         color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                         style = MaterialTheme.typography.caption,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            top = 8.dp,
+                            bottom = 16.dp
+                        )
                     )
                     MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
                     MainMenuItem(text = menu[1], onClick = onMembersClick)
@@ -148,7 +154,11 @@ fun MainMenuItem(text: String, onClick: () -> Unit) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MainNumber(text: String = "Number of seats", numberText: String, onEditNumber: (String) -> Unit) {
+fun MainNumber(
+    text: String = "Number of seats",
+    numberText: String,
+    onEditNumber: (String) -> Unit
+) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -169,7 +179,7 @@ fun MainNumber(text: String = "Number of seats", numberText: String, onEditNumbe
                     fontSize = 26.sp,
                     textAlign = TextAlign.End,
                 ),
-                colors =  TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = MaterialTheme.colors.primary,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -211,7 +221,7 @@ fun DragBox(
                     onMoveOffsetY(id, dragAmount.y)
                 }
             }
-                .background(color = MaterialTheme.colors.primary.copy())
-        )
+            .background(color = MaterialTheme.colors.primary.copy())
+    )
 
 }

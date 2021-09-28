@@ -1,20 +1,18 @@
 package com.example.seatassist.ui.main
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
     var numberText = mutableStateOf("")
 
     fun editNumber(newNumber: String) {
         numberText.value = newNumber
     }
-
-
-
 
 
     var offsetList = mutableStateListOf<OffsetData>()
@@ -30,9 +28,6 @@ class MainViewModel: ViewModel() {
     fun moveOffsetY(id: Int, newOffsetY: Float) {
         offsetList[id].offsetY.value += newOffsetY
     }
-
-
-
 
 
     var membersList = mutableStateListOf<MembersData>()
