@@ -21,6 +21,15 @@ class MainViewModel : ViewModel() {
         offsetList.add(OffsetData(id, mutableStateOf(OffsetX), mutableStateOf(OffsetY)))
     }
 
+    fun removeObject(id: Int) {
+        offsetList.removeAt(id)
+        if (id != offsetList.size) {
+            for (i in id until offsetList.size) {
+                offsetList[i].id -= 1
+            }
+        }
+    }
+
     fun moveOffsetX(id: Int, newOffsetX: Float) {
         offsetList[id].offsetX.value += newOffsetX
     }
