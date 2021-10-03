@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -38,6 +39,7 @@ fun MainScreen(
     onSizeClick: () -> Unit,
     onEditNumber: (String) -> Unit,
     onAddObject: (Int, Float, Float) -> Unit,
+    onRemoveObject: (Int) -> Unit,
     onMoveOffsetX: (Int, Float) -> Unit,
     onMoveOffsetY: (Int, Float) -> Unit
 ) {
@@ -52,43 +54,26 @@ fun MainScreen(
             val stateValue =
                 if (state.value <= screenHeight.value * 0.3) state.value else (screenHeight.value * 0.3).toInt()
 
-            Surface(
-                contentColor = MaterialTheme.colors.primary
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(screenWidth)
-                        .height((screenHeight.value * 0.85F - stateValue).dp)
-                        .clickable { onAddObject(offsetList.size, 0f, 0f) }
-                ) {
-                    // 操作画面をここに記述
-                    offsetList.forEach { offsetData ->
-                        DragBox(
-                            id = offsetData.id,
-                            offsetX = offsetData.offsetX.value,
-                            offsetY = offsetData.offsetY.value,
-                            onMoveOffsetX = onMoveOffsetX,
-                            onMoveOffsetY = onMoveOffsetY
-                        )
+            Box(
+                modifier = Modifier
+                    .width(screenWidth)
+                    .height((screenHeight.value * 0.85F - stateValue).dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures { onAddObject(offsetList.size, it.x, it.y) }
                     }
+            ) {
+                // 操作画面をここに記述
+                offsetList.forEach { offsetData ->
+                    DragBox(
+                        id = offsetData.id,
+                        offsetX = offsetData.offsetX.value,
+                        offsetY = offsetData.offsetY.value,
+                        onMoveOffsetX = onMoveOffsetX,
+                        onMoveOffsetY = onMoveOffsetY,
+                        onRemoveObject = onRemoveObject
+                    )
                 }
             }
-
-//            Box(
-//                modifier = Modifier
-//                    .width(screenWidth)
-//                    .height((screenHeight.value * 0.85F - stateValue).dp)
-//                    .clickable { onAddObject(offsetList.size, 0f, 0f) }
-//            ) {
-//                // 操作画面をここに記述
-//                offsetList.forEach { offsetData ->
-//                    DragBox(id = offsetData.id,
-//                        offsetX = offsetData.offsetX.value,
-//                        offsetY = offsetData.offsetY.value,
-//                        onMoveOffsetX = onMoveOffsetX,
-//                        onMoveOffsetY = onMoveOffsetY)
-//                }
-//            }
 
             Surface(
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -207,7 +192,8 @@ fun DragBox(
     offsetX: Float,
     offsetY: Float,
     onMoveOffsetX: (Int, Float) -> Unit,
-    onMoveOffsetY: (Int, Float) -> Unit
+    onMoveOffsetY: (Int, Float) -> Unit,
+    onRemoveObject: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -221,7 +207,9 @@ fun DragBox(
                     onMoveOffsetY(id, dragAmount.y)
                 }
             }
-            .background(color = MaterialTheme.colors.primary.copy())
+            .pointerInput(Unit) {
+                detectTapGestures(onDoubleTap = { onRemoveObject(id) })
+            }
+            .background(color = MaterialTheme.colors.primary)
     )
-
 }
