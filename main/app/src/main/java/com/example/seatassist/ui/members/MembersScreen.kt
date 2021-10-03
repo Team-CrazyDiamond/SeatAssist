@@ -33,10 +33,11 @@ fun MembersScreen(
     numberText: String,
     onAddMember: (Int, String) -> Unit,
     onRemoveMember: (Int) -> Unit,
-    onEditName: (Int, String) -> Unit
+    onEditName: (Int, String) -> Unit,
+    onNavigationClick: () -> Unit
 ) {
     Scaffold(
-        topBar = { MembersTopBar() },
+        topBar = { MembersTopBar(onNavigationClick = onNavigationClick) },
         floatingActionButton = { MembersFloatingButton(id = membersList.size, onAddMember = onAddMember) }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -64,13 +65,12 @@ fun MembersScreen(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun MembersTopBar() {
+fun MembersTopBar(onNavigationClick: () -> Unit) {
     TopAppBar(
         title = { Text(text = "Members") },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onNavigationClick() }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
             }
         },

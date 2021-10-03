@@ -54,65 +54,77 @@ fun MainScreen(
             val stateValue =
                 if (state.value <= screenHeight.value * 0.3) state.value else (screenHeight.value * 0.3).toInt()
 
-            Box(
-                modifier = Modifier
-                    .width(screenWidth)
-                    .height((screenHeight.value * 0.85F - stateValue).dp)
-                    .pointerInput(Unit) {
-                        detectTapGestures { onAddObject(offsetList.size, it.x, it.y) }
-                    }
+            Surface(
+                color = MaterialTheme.colors.onPrimary,
+                contentColor = MaterialTheme.colors.primaryVariant
             ) {
-                // 操作画面をここに記述
-                offsetList.forEach { offsetData ->
-                    DragBox(
-                        id = offsetData.id,
-                        offsetX = offsetData.offsetX.value,
-                        offsetY = offsetData.offsetY.value,
-                        onMoveOffsetX = onMoveOffsetX,
-                        onMoveOffsetY = onMoveOffsetY,
-                        onRemoveObject = onRemoveObject
-                    )
+                Box(
+                    modifier = Modifier
+                        .width(screenWidth)
+                        .height((screenHeight.value * 0.85F - stateValue).dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures { onAddObject(offsetList.size, it.x, it.y) }
+                        }
+                ) {
+                    // 操作画面をここに記述
+                    offsetList.forEach { offsetData ->
+                        DragBox(
+                            id = offsetData.id,
+                            color = MaterialTheme.colors.primaryVariant,
+                            offsetX = offsetData.offsetX.value,
+                            offsetY = offsetData.offsetY.value,
+                            onMoveOffsetX = onMoveOffsetX,
+                            onMoveOffsetY = onMoveOffsetY,
+                            onRemoveObject = onRemoveObject
+                        )
+                    }
                 }
             }
 
-            Surface(
-                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-                color = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .height((screenHeight.value * 0.15F + stateValue).dp)
+            Box(
+                modifier = Modifier.background(color = MaterialTheme.colors.onPrimary)
             ) {
-                Column(
+                Surface(
+                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                    color = MaterialTheme.colors.primary,
+                    contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
                     modifier = Modifier
-                        .wrapContentHeight()
-                        .scrollable(
-                            orientation = Orientation.Vertical,
-                            state = state,
-                            reverseDirection = true,
-                        )
+                        .height((screenHeight.value * 0.15F + stateValue).dp)
                 ) {
-                    Text(
-                        text = "Menu",
-                        style = MaterialTheme.typography.h6,
-                        fontSize = 34.sp,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                    )
-                    Text(
-                        text = "Write the menu description here",
-                        color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-                        style = MaterialTheme.typography.caption,
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 8.dp,
-                            bottom = 16.dp
+                    Column(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .scrollable(
+                                orientation = Orientation.Vertical,
+                                state = state,
+                                reverseDirection = true,
+                            )
+                    ) {
+                        Text(
+                            text = "Menu",
+                            style = MaterialTheme.typography.h6,
+                            fontSize = 34.sp,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
                         )
-                    )
-                    MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
-                    MainMenuItem(text = menu[1], onClick = onMembersClick)
-                    MainMenuItem(text = menu[2], onClick = onSizeClick)
-                    Spacer(modifier = Modifier.size(16.dp))
+                        Text(
+                            text = "Write the menu description here",
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                            style = MaterialTheme.typography.caption,
+                            modifier = Modifier.padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                top = 8.dp,
+                                bottom = 16.dp
+                            )
+                        )
+                        MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
+                        MainMenuItem(text = menu[1], onClick = onMembersClick)
+                        MainMenuItem(text = menu[2], onClick = onSizeClick)
+                        Spacer(modifier = Modifier.size(16.dp))
+                    }
                 }
             }
+
         }
     }
 }
@@ -189,6 +201,7 @@ fun MainNumber(
 @Composable
 fun DragBox(
     id: Int,
+    color: Color,
     offsetX: Float,
     offsetY: Float,
     onMoveOffsetX: (Int, Float) -> Unit,
@@ -210,6 +223,6 @@ fun DragBox(
             .pointerInput(Unit) {
                 detectTapGestures(onDoubleTap = { onRemoveObject(id) })
             }
-            .background(color = MaterialTheme.colors.primary)
+                .background(color = color)
     )
 }

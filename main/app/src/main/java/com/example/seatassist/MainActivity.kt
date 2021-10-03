@@ -72,7 +72,8 @@ fun SeatAssistNavHost(
                 membersList = mainViewModel.membersList,
                 onAddMember = mainViewModel::addMember,
                 onRemoveMember = mainViewModel::removeMember,
-                onEditName = mainViewModel::editName
+                onEditName = mainViewModel::editName,
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
         composable(route = SeatAssistScreen.Size.name) {
