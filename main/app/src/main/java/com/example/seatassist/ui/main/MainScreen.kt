@@ -2,34 +2,38 @@ package com.example.seatassist.ui.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.OffsetData
+import com.example.seatassist.ui.components.MainButton
+import com.example.seatassist.ui.components.MainDivider
 import com.example.seatassist.ui.components.MainPlaceholder
+import com.example.seatassist.ui.components.SubText
 import kotlin.math.roundToInt
 
 /**
 
  **/
+@ExperimentalMaterialApi
 @Composable
 fun MainScreen(
     numberText: String,
@@ -43,90 +47,61 @@ fun MainScreen(
     onMoveOffsetX: (Int, Float) -> Unit,
     onMoveOffsetY: (Int, Float) -> Unit
 ) {
-    BoxWithConstraints {
-        val screenWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
-        val screenHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }
-
-        Column(
-            modifier = Modifier.wrapContentHeight()
-        ) {
-            val state = rememberScrollState()
-            val stateValue =
-                if (state.value <= screenHeight.value * 0.3) state.value else (screenHeight.value * 0.3).toInt()
-
-            Surface(
-                color = MaterialTheme.colors.onPrimary,
-                contentColor = MaterialTheme.colors.primaryVariant
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(screenWidth)
-                        .height((screenHeight.value * 0.85F - stateValue).dp)
-                        .pointerInput(Unit) {
-                            detectTapGestures { onAddObject(offsetList.size, it.x, it.y) }
-                        }
-                ) {
-                    // 操作画面をここに記述
-                    offsetList.forEach { offsetData ->
-                        DragBox(
-                            id = offsetData.id,
-                            color = MaterialTheme.colors.primaryVariant,
-                            offsetX = offsetData.offsetX.value,
-                            offsetY = offsetData.offsetY.value,
-                            onMoveOffsetX = onMoveOffsetX,
-                            onMoveOffsetY = onMoveOffsetY,
-                            onRemoveObject = onRemoveObject
-                        )
-                    }
-                }
-            }
-
+    BackdropScaffold(
+        appBar = {  },
+        backLayerContent = {
             Box(
-                modifier = Modifier.background(color = MaterialTheme.colors.onPrimary)
-            ) {
-                Surface(
-                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-                    color = MaterialTheme.colors.primary,
-                    contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
-                    modifier = Modifier
-                        .height((screenHeight.value * 0.15F + stateValue).dp)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .wrapContentHeight()
-                            .scrollable(
-                                orientation = Orientation.Vertical,
-                                state = state,
-                                reverseDirection = true,
-                            )
-                    ) {
-                        Text(
-                            text = "Menu",
-                            style = MaterialTheme.typography.h6,
-                            fontSize = 34.sp,
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                        )
-                        Text(
-                            text = "Write the menu description here",
-                            color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-                            style = MaterialTheme.typography.caption,
-                            modifier = Modifier.padding(
-                                start = 16.dp,
-                                end = 16.dp,
-                                top = 8.dp,
-                                bottom = 16.dp
-                            )
-                        )
-                        MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
-                        MainMenuItem(text = menu[1], onClick = onMembersClick)
-                        MainMenuItem(text = menu[2], onClick = onSizeClick)
-                        Spacer(modifier = Modifier.size(16.dp))
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectTapGestures { onAddObject(offsetList.size, it.x, it.y) }
                     }
+            ) {
+                // 操作画面をここに記述
+                offsetList.forEach { offsetData ->
+                    DragBox(
+                        id = offsetData.id,
+                        color = MaterialTheme.colors.primaryVariant,
+                        offsetX = offsetData.offsetX.value,
+                        offsetY = offsetData.offsetY.value,
+                        onMoveOffsetX = onMoveOffsetX,
+                        onMoveOffsetY = onMoveOffsetY,
+                        onRemoveObject = onRemoveObject
+                    )
                 }
             }
-
-        }
-    }
+        },
+        frontLayerContent = {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = "Menu",
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                    style = MaterialTheme.typography.h6,
+                    fontSize = 34.sp,
+                )
+                SubText(
+                    text = "Write the menu description here",
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
+                )
+                MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
+                MainMenuItem(text = menu[1], onClick = onMembersClick)
+                MainMenuItem(text = menu[2], onClick = onSizeClick)
+                Spacer(modifier = Modifier.size(16.dp))
+                LotteryRestButton()
+            }
+        },
+        scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed),
+        peekHeight = 170.dp,
+        headerHeight = 110.dp,
+        backLayerBackgroundColor = MaterialTheme.colors.primary,
+        backLayerContentColor = MaterialTheme.colors.primaryVariant,
+        frontLayerBackgroundColor = MaterialTheme.colors.onPrimary,
+        frontLayerContentColor = MaterialTheme.colors.primary,
+        frontLayerScrimColor = Color.Unspecified,
+        frontLayerShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+    )
 }
 
 @Composable
@@ -140,12 +115,7 @@ fun MainMenuItem(text: String, onClick: () -> Unit) {
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp)
         )
-        Divider(
-            color = MaterialTheme.colors.onPrimary.copy(alpha = ContentAlpha.medium),
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth()
-        )
+        MainDivider()
     }
 }
 
@@ -177,7 +147,7 @@ fun MainNumber(
                     textAlign = TextAlign.End,
                 ),
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.primary,
+                    backgroundColor = MaterialTheme.colors.onPrimary,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
@@ -189,12 +159,7 @@ fun MainNumber(
                 })
             )
         }
-        Divider(
-            color = MaterialTheme.colors.onPrimary.copy(alpha = ContentAlpha.medium),
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth()
-        )
+        MainDivider()
     }
 }
 
@@ -223,6 +188,27 @@ fun DragBox(
             .pointerInput(Unit) {
                 detectTapGestures(onDoubleTap = { onRemoveObject(id) })
             }
-                .background(color = color)
+            .background(color = color)
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LotteryRestButton() {
+    SubText(
+        text = "Once you have entered all the information, please click on the lottery button." +
+                " There is also a reset button.",
+        modifier = Modifier.padding(start = 16.dp, end = 19.dp, top = 16.dp)
+    )
+    MainButton(
+        text = "Lottery",
+        color = MaterialTheme.colors.primary,
+    )
+    MainButton(
+        text = "Reset",
+        color = MaterialTheme.colors.onPrimary,
+        contentColor = MaterialTheme.colors.primary,
+        borderColor = MaterialTheme.colors.primary
+    )
+    Spacer(modifier = Modifier.size(16.dp))
 }

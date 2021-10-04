@@ -17,8 +17,8 @@ private val LightColorPalette = lightColors(
 //    primaryVariant = Purple700,
 //    secondary = Teal200
 
-    primary = PickledBlueWood,
-    onPrimary = Sidecar,
+    primary = Sidecar,
+    onPrimary = PickledBlueWood,
     primaryVariant = AkaRoa,
     secondary = Teal200,
 

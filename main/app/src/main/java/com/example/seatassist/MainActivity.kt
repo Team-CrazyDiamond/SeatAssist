@@ -3,6 +3,7 @@ package com.example.seatassist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel = MainViewModel()
 
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,6 +29,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 fun SeatAssistApp(mainViewModel: MainViewModel) {
     val navController = rememberNavController()
@@ -39,6 +42,7 @@ fun SeatAssistApp(mainViewModel: MainViewModel) {
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 fun SeatAssistNavHost(
     navController: NavHostController,
