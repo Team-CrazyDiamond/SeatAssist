@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.max
 
+/**
+メニュータイトル
+**/
 @Composable
 fun MainPlaceholder(text: String, textAlign: TextAlign = TextAlign.End, fontSize: TextUnit = 16.sp) {
     Text(
@@ -31,6 +34,9 @@ fun MainPlaceholder(text: String, textAlign: TextAlign = TextAlign.End, fontSize
     )
 }
 
+/**
+メニュー内のボタン
+**/
 @Composable
 fun MainButton(
     text: String,
@@ -65,6 +71,9 @@ fun MainButton(
     }
 }
 
+/**
+メインメニューの分断ライン
+**/
 @Composable
 fun MainDivider() {
     Divider(
@@ -75,6 +84,9 @@ fun MainDivider() {
     )
 }
 
+/**
+メニューの説明文（少し薄いやつ）
+**/
 @Composable
 fun SubText(
     text: String,
