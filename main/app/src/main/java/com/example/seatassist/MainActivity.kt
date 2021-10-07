@@ -15,11 +15,13 @@ import com.example.seatassist.ui.main.MainViewModel
 import com.example.seatassist.ui.members.MembersScreen
 import com.example.seatassist.ui.size.SizeScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
 
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel = MainViewModel()
 
+    @ExperimentalPagerApi
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +31,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
 fun SeatAssistApp(mainViewModel: MainViewModel) {
@@ -42,6 +45,7 @@ fun SeatAssistApp(mainViewModel: MainViewModel) {
     }
 }
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
 fun SeatAssistNavHost(
@@ -58,6 +62,9 @@ fun SeatAssistNavHost(
             // Main Compose
             MainScreen(
                 numberText = mainViewModel.numberText.value,
+                sizeValue = mainViewModel.sizeValue.value,
+                scaleValue = mainViewModel.scaleValue,
+                dragColor = mainViewModel.color.value,
                 offsetList = mainViewModel.offsetList,
                 onAddObject = mainViewModel::addObject,
                 onRemoveObject = mainViewModel::removeObject,
@@ -82,7 +89,12 @@ fun SeatAssistNavHost(
         }
         composable(route = SeatAssistScreen.Size.name) {
             // Size Compose
-            SizeScreen()
+            SizeScreen(
+                scaleValue = mainViewModel.scaleValue,
+                sizeValue = mainViewModel.sizeValue.value,
+                onEditScale = mainViewModel::editScale,
+                onEditSize = mainViewModel::editSize
+            )
         }
     }
 }
