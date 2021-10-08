@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.R
@@ -33,7 +34,8 @@ fun StartScreen() {
             Text(
                 text = "Seat Assist",
                 color = MaterialTheme.colors.onPrimary,
-                fontSize = 60.sp
+                fontSize = 60.sp,
+                fontWeight = FontWeight.Bold
             )
             Box(
                 modifier = Modifier
@@ -71,7 +73,8 @@ fun StartButton(text: String, onClick: () -> Unit) {
                 color = MaterialTheme.colors.primary,
                 style = MaterialTheme.typography.h4,
                 fontSize = 20.sp,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(16.dp)
             )
         }
     }
