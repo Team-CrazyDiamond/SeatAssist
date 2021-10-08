@@ -17,6 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.R
 
+/**
+ * スタート画面
+ */
 @ExperimentalMaterialApi
 @Composable
 fun StartScreen() {
@@ -47,16 +50,21 @@ fun StartScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    ChairImg()
+                    ChairImg()  // 椅子の画像を挿入
                 }
             }
-            StartButton("Start", {})
-            HowToUse("How to use this App", {})
+            StartButton("Start", {})    // スタートボタン
+            HowToUse("How to use this App", {}) // 使い方ボタン
         }
     }
 
 }
 
+/**
+ * スタートボタン
+ * @param text スタートボタンの文言
+ * @param onClick メインページへ
+ */
 @Composable
 fun StartButton(text: String, onClick: () -> Unit) {
     Surface(
@@ -80,6 +88,11 @@ fun StartButton(text: String, onClick: () -> Unit) {
     }
 }
 
+/**
+ * 使い方ボタン
+ * @param text How to use this App
+ * @param onClick 使い方ページへ
+ */
 @Composable
 fun HowToUse(text: String, onClick: () -> Unit) {
     Row(
@@ -96,6 +109,9 @@ fun HowToUse(text: String, onClick: () -> Unit) {
     }
 }
 
+/**
+ * 椅子の画像
+ */
 @Composable
 fun ChairImg() {
     Row(verticalAlignment = Alignment.CenterVertically) {
