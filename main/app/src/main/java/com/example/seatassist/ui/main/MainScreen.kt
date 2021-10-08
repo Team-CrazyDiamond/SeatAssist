@@ -1,6 +1,5 @@
 package com.example.seatassist.ui.main
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -8,22 +7,24 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.OffsetData
+import com.example.seatassist.data.ScaleData
 import com.example.seatassist.ui.components.MainButton
 import com.example.seatassist.ui.components.MainDivider
 import com.example.seatassist.ui.components.MainPlaceholder
@@ -37,33 +38,45 @@ import kotlin.math.roundToInt
 @Composable
 fun MainScreen(
     numberText: String,
+    sizeValue: Dp,
+    scaleValue: ScaleData,
+    dragColor: Color,
     menu: List<String> = listOf("Number of seats", "Members", "Seats size"),
     offsetList: List<OffsetData>,
     onMembersClick: () -> Unit,
     onSizeClick: () -> Unit,
     onEditNumber: (String) -> Unit,
-    onAddObject: (Int, Float, Float) -> Unit,
+    onAddObject: (Int, Float, Float, Color, Dp) -> Unit,
     onRemoveObject: (Int) -> Unit,
     onMoveOffsetX: (Int, Float) -> Unit,
     onMoveOffsetY: (Int, Float) -> Unit
 ) {
     BackdropScaffold(
-        appBar = {  },
+        appBar = { },
         backLayerContent = {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .pointerInput(Unit) {
-                        detectTapGestures { onAddObject(offsetList.size, it.x, it.y) }
+                        detectTapGestures {
+                            onAddObject(
+                                offsetList.size,
+                                it.x,
+                                it.y,
+                                dragColor,
+                                sizeValue * scaleValue.scale.value
+                            )
+                        }
                     }
             ) {
                 // 操作画面をここに記述
                 offsetList.forEach { offsetData ->
                     DragBox(
                         id = offsetData.id,
-                        color = MaterialTheme.colors.primaryVariant,
+                        color = offsetData.color,
                         offsetX = offsetData.offsetX.value,
                         offsetY = offsetData.offsetY.value,
+                        sizeValue = offsetData.size,
                         onMoveOffsetX = onMoveOffsetX,
                         onMoveOffsetY = onMoveOffsetY,
                         onRemoveObject = onRemoveObject
@@ -83,7 +96,12 @@ fun MainScreen(
                 )
                 SubText(
                     text = "Write the menu description here",
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 8.dp,
+                        bottom = 16.dp
+                    )
                 )
                 MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
                 MainMenuItem(text = menu[1], onClick = onMembersClick)
@@ -100,7 +118,8 @@ fun MainScreen(
         frontLayerBackgroundColor = MaterialTheme.colors.onPrimary,
         frontLayerContentColor = MaterialTheme.colors.primary,
         frontLayerScrimColor = Color.Unspecified,
-        frontLayerShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        frontLayerShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        frontLayerElevation = 8.dp
     )
 }
 
@@ -154,6 +173,7 @@ fun MainNumber(
                     disabledTextColor = Color.Transparent
                 ),
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
                 })
@@ -169,15 +189,18 @@ fun DragBox(
     color: Color,
     offsetX: Float,
     offsetY: Float,
+    sizeValue: Dp,
     onMoveOffsetX: (Int, Float) -> Unit,
     onMoveOffsetY: (Int, Float) -> Unit,
     onRemoveObject: (Int) -> Unit
 ) {
-    Box(
+    Surface(
+        color = color,
+        shape = RoundedCornerShape(8.dp),
+        elevation = 8.dp,
         modifier = Modifier
             .offset { IntOffset(x = offsetX.roundToInt(), y = offsetY.roundToInt()) }
-            .background(color = Color.Black)
-            .size(50.dp)
+            .size(sizeValue)
             .pointerInput(Unit) {
                 detectDragGestures { change, dragAmount ->
                     change.consumeAllChanges()
@@ -188,11 +211,11 @@ fun DragBox(
             .pointerInput(Unit) {
                 detectTapGestures(onDoubleTap = { onRemoveObject(id) })
             }
-            .background(color = color)
-    )
+    ) {
+        // 名前を記述する処理
+    }
 }
 
-@Preview(showBackground = true)
 @Composable
 fun LotteryRestButton() {
     SubText(
