@@ -1,19 +1,20 @@
 package com.example.seatassist.ui.start
 
+
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.seatassist.R
 
 @ExperimentalMaterialApi
 @Composable
@@ -29,15 +30,28 @@ fun StartScreen() {
             verticalArrangement = Arrangement.Center
         )
         {
+            Text(
+                text = "Seat Assist",
+                color = MaterialTheme.colors.onPrimary,
+                fontSize = 60.sp
+            )
             Box(
                 modifier = Modifier
                     .size(400.dp)
-            ) {}
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    ChairImg()
+                }
+            }
             StartButton("Start", {})
-            HowToUse("How to use this App",{})
+            HowToUse("How to use this App", {})
         }
     }
-
 
 }
 
@@ -64,7 +78,7 @@ fun StartButton(text: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun HowToUse(text: String, onClick: () -> Unit){
+fun HowToUse(text: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .clickable(onClick = onClick)
@@ -79,8 +93,15 @@ fun HowToUse(text: String, onClick: () -> Unit){
     }
 }
 
-@Preview
 @Composable
-fun TestStartButton() {
-    StartButton("Start", {})
+fun ChairImg() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Image(
+            painter = painterResource(id = R.drawable.chair_backcolor_yellow_hhd),
+            contentDescription = "chair image",
+            modifier = Modifier
+                .size(500.dp)
+                .clip(CircleShape)
+        )
+    }
 }
