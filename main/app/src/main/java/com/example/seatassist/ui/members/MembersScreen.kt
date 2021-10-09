@@ -33,18 +33,16 @@ fun MembersScreen(
     numberText: String,
     onAddMember: (Int, String) -> Unit,
     onRemoveMember: (Int) -> Unit,
-    onEditName: (Int, String) -> Unit
+    onEditName: (Int, String) -> Unit,
+    onNavigationClick: () -> Unit
 ) {
     Scaffold(
-        topBar = { MembersTopBar() },
-        floatingActionButton = { MembersFloatingButton(id = membersList.size, onAddMember = onAddMember) }
+        topBar = { MembersTopBar(onNavigationClick = onNavigationClick) },
+        floatingActionButton = { MembersFloatingButton(id = membersList.size, onAddMember = onAddMember) },
+        backgroundColor = MaterialTheme.colors.primary,
+        contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colors.primary)
-            )
             MembersCustomLayout {
                 val counter = remember { mutableStateOf(0) }
                 if (membersList.isEmpty() && numberText.toIntOrNull() != null && counter.value == 0) {
@@ -64,24 +62,27 @@ fun MembersScreen(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun MembersTopBar() {
+fun MembersTopBar(onNavigationClick: () -> Unit) {
     TopAppBar(
         title = { Text(text = "Members") },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onNavigationClick() }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
             }
         },
-        elevation = 0.dp
+        elevation = 0.dp,
+        backgroundColor = MaterialTheme.colors.primary,
+        contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
     )
 }
 
 @Composable
 fun MembersFloatingButton(id: Int, onAddMember: (Int, String) -> Unit) {
     FloatingActionButton(
-        onClick = { onAddMember(id, "") }
+        onClick = { onAddMember(id, "") },
+        backgroundColor = MaterialTheme.colors.onPrimary,
+        contentColor = MaterialTheme.colors.primary
     ) {
         Icon(imageVector = Icons.Outlined.Add, contentDescription = "add button")
     }
@@ -104,7 +105,9 @@ fun MembersItem(
 
         Surface(
             shape = RoundedCornerShape(8.dp),
-            color = MaterialTheme.colors.primaryVariant,
+            color = MaterialTheme.colors.onPrimary,
+            contentColor = MaterialTheme.colors.primary,
+            elevation = 0.dp,
             modifier = Modifier.width(itemWidth)
         ) {
             Row(
@@ -138,7 +141,7 @@ fun MembersItem(
                     Icon(
                         imageVector = Icons.Outlined.Clear,
                         contentDescription = "delete button",
-                        tint = MaterialTheme.colors.onPrimary,
+                        tint = MaterialTheme.colors.primary,
                     )
                 }
 

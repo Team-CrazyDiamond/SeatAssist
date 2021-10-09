@@ -3,6 +3,7 @@ package com.example.seatassist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -14,11 +15,14 @@ import com.example.seatassist.ui.main.MainViewModel
 import com.example.seatassist.ui.members.MembersScreen
 import com.example.seatassist.ui.size.SizeScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
 
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel = MainViewModel()
 
+    @ExperimentalPagerApi
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,6 +31,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalPagerApi
+@ExperimentalMaterialApi
 @Composable
 fun SeatAssistApp(mainViewModel: MainViewModel) {
     val navController = rememberNavController()
@@ -39,6 +45,8 @@ fun SeatAssistApp(mainViewModel: MainViewModel) {
     }
 }
 
+@ExperimentalPagerApi
+@ExperimentalMaterialApi
 @Composable
 fun SeatAssistNavHost(
     navController: NavHostController,
@@ -54,8 +62,12 @@ fun SeatAssistNavHost(
             // Main Compose
             MainScreen(
                 numberText = mainViewModel.numberText.value,
+                sizeValue = mainViewModel.sizeValue.value,
+                scaleValue = mainViewModel.scaleValue,
+                dragColor = mainViewModel.color.value,
                 offsetList = mainViewModel.offsetList,
                 onAddObject = mainViewModel::addObject,
+                onRemoveObject = mainViewModel::removeObject,
                 onMoveOffsetX = mainViewModel::moveOffsetX,
                 onMoveOffsetY = mainViewModel::moveOffsetY,
                 onMembersClick = { navController.navigate(SeatAssistScreen.Members.name) },
@@ -71,12 +83,18 @@ fun SeatAssistNavHost(
                 membersList = mainViewModel.membersList,
                 onAddMember = mainViewModel::addMember,
                 onRemoveMember = mainViewModel::removeMember,
-                onEditName = mainViewModel::editName
+                onEditName = mainViewModel::editName,
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
         composable(route = SeatAssistScreen.Size.name) {
             // Size Compose
-            SizeScreen()
+            SizeScreen(
+                scaleValue = mainViewModel.scaleValue,
+                sizeValue = mainViewModel.sizeValue.value,
+                onEditScale = mainViewModel::editScale,
+                onEditSize = mainViewModel::editSize
+            )
         }
     }
 }
