@@ -26,6 +26,7 @@ fun StartScreen() {
 
     Scaffold(
         backgroundColor = MaterialTheme.colors.primary,
+        contentColor = contentColorFor(MaterialTheme.colors.primary)
     ) {
         Column(
             modifier = Modifier
@@ -35,8 +36,7 @@ fun StartScreen() {
         )
         {
             Text(
-                text = "Seat Assist",
-                color = MaterialTheme.colors.onPrimary,
+                text = "Seat Assist"
                 fontSize = 60.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -69,6 +69,7 @@ fun StartScreen() {
 fun StartButton(text: String, onClick: () -> Unit) {
     Surface(
         color = MaterialTheme.colors.onPrimary,
+        contentColor = MaterialTheme.colors.primary
         shape = RoundedCornerShape(8.dp)
     ) {
         Column(
@@ -78,7 +79,6 @@ fun StartButton(text: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
-                color = MaterialTheme.colors.primary,
                 style = MaterialTheme.typography.h4,
                 fontSize = 20.sp,
                 modifier = Modifier
@@ -118,9 +118,7 @@ fun ChairImg() {
         Image(
             painter = painterResource(id = R.drawable.chair_backcolor_yellow_hhd),
             contentDescription = "chair image",
-            modifier = Modifier
-                .size(500.dp)
-                .clip(CircleShape)
+            modifier = Modifier.size(500.dp)
         )
     }
 }
