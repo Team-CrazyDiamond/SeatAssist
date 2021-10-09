@@ -15,6 +15,7 @@ import com.example.seatassist.ui.main.MainViewModel
 import com.example.seatassist.ui.members.MembersScreen
 import com.example.seatassist.ui.size.SizeScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
+import com.example.seatassist.ui.start.StartScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 class MainActivity : ComponentActivity() {
@@ -55,9 +56,14 @@ fun SeatAssistNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = SeatAssistScreen.Main.name,
+        startDestination = SeatAssistScreen.Start.name,
         modifier = modifier
     ) {
+        composable(route = SeatAssistScreen.Start.name){
+            StartScreen(
+                onStartClick = { navController.navigate(SeatAssistScreen.Main.name) }
+            )
+        }
         composable(route = SeatAssistScreen.Main.name) {
             // Main Compose
             MainScreen(

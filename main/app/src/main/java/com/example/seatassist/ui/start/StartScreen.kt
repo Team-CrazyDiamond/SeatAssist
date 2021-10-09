@@ -22,7 +22,9 @@ import com.example.seatassist.R
  */
 @ExperimentalMaterialApi
 @Composable
-fun StartScreen() {
+fun StartScreen(
+    onStartClick:() -> Unit
+) {
 
     Scaffold(
         backgroundColor = MaterialTheme.colors.primary,
@@ -36,7 +38,7 @@ fun StartScreen() {
         )
         {
             Text(
-                text = "Seat Assist"
+                text = "Seat Assist",
                 fontSize = 60.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -53,7 +55,7 @@ fun StartScreen() {
                     ChairImg()  // 椅子の画像を挿入
                 }
             }
-            StartButton("Start", {})    // スタートボタン
+            StartButton("Start", onStartClick)    // スタートボタン
             HowToUse("How to use this App", {}) // 使い方ボタン
         }
     }
@@ -69,7 +71,7 @@ fun StartScreen() {
 fun StartButton(text: String, onClick: () -> Unit) {
     Surface(
         color = MaterialTheme.colors.onPrimary,
-        contentColor = MaterialTheme.colors.primary
+        contentColor = MaterialTheme.colors.primary,
         shape = RoundedCornerShape(8.dp)
     ) {
         Column(
