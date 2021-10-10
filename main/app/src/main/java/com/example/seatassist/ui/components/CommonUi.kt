@@ -1,19 +1,25 @@
 package com.example.seatassist.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,6 +74,56 @@ fun MainButton(
                 style = MaterialTheme.typography.h4
             )
         }
+    }
+}
+
+/**
+メニュー内の編集コンポーネント
+ **/
+@ExperimentalComposeUiApi
+@Composable
+fun MainEditText(
+    text: String,
+    editText: String,
+    placeholderText: String,
+    onEditText: (String) -> Unit
+
+    ) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            val keyboardController = LocalSoftwareKeyboardController.current
+            Text(
+                text = text,
+                style = MaterialTheme.typography.h4,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(16.dp)
+            )
+            TextField(
+                value = editText,
+                onValueChange = { onEditText(it) },
+                placeholder = { MainPlaceholder(text = placeholderText) },
+                textStyle = MaterialTheme.typography.h4.copy(
+                    fontSize = 26.sp,
+                    textAlign = TextAlign.End,
+                ),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.onPrimary,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    disabledTextColor = Color.Transparent
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboardController?.hide()
+                })
+            )
+        }
+        MainDivider()
     }
 }
 

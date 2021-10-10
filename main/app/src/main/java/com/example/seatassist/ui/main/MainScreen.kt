@@ -25,15 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.data.ScaleData
-import com.example.seatassist.ui.components.MainButton
-import com.example.seatassist.ui.components.MainDivider
-import com.example.seatassist.ui.components.MainPlaceholder
-import com.example.seatassist.ui.components.SubText
+import com.example.seatassist.ui.components.*
 import kotlin.math.roundToInt
 
 /**
 
  **/
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(
@@ -103,7 +101,12 @@ fun MainScreen(
                         bottom = 16.dp
                     )
                 )
-                MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
+                MainEditText(
+                    text = menu[0],
+                    editText = numberText,
+                    placeholderText = "Input number",
+                    onEditText = onEditNumber
+                )
                 MainMenuItem(text = menu[1], onClick = onMembersClick)
                 MainMenuItem(text = menu[2], onClick = onSizeClick)
                 Spacer(modifier = Modifier.size(16.dp))
@@ -134,51 +137,6 @@ fun MainMenuItem(text: String, onClick: () -> Unit) {
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp)
         )
-        MainDivider()
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun MainNumber(
-    text: String = "Number of seats",
-    numberText: String,
-    onEditNumber: (String) -> Unit
-) {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            val keyboardController = LocalSoftwareKeyboardController.current
-            Text(
-                text = text,
-                style = MaterialTheme.typography.h4,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(16.dp)
-            )
-            TextField(
-                value = numberText,
-                onValueChange = { onEditNumber(it) },
-                placeholder = { MainPlaceholder(text = "Input text") },
-                textStyle = MaterialTheme.typography.h4.copy(
-                    fontSize = 26.sp,
-                    textAlign = TextAlign.End,
-                ),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.onPrimary,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    disabledTextColor = Color.Transparent
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-                keyboardActions = KeyboardActions(onDone = {
-                    keyboardController?.hide()
-                })
-            )
-        }
         MainDivider()
     }
 }

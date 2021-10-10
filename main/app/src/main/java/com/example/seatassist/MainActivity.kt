@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.core.graphics.scaleMatrix
 import androidx.navigation.NavHostController
@@ -14,7 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.seatassist.ui.main.MainScreen
 import com.example.seatassist.ui.main.MainViewModel
 import com.example.seatassist.ui.members.MembersScreen
-import com.example.seatassist.ui.size.SizeScreen
+import com.example.seatassist.ui.custom.CustomScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
 import com.example.seatassist.ui.start.StartScreen
 import com.example.seatassist.ui.usage.UsageScreen
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel = MainViewModel()
 
+    @ExperimentalComposeUiApi
     @ExperimentalPagerApi
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalComposeUiApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
@@ -48,6 +51,7 @@ fun SeatAssistApp(mainViewModel: MainViewModel) {
     }
 }
 
+@ExperimentalComposeUiApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
@@ -104,11 +108,12 @@ fun SeatAssistNavHost(
         }
         composable(route = SeatAssistScreen.Size.name) {
             // Size Compose
-            SizeScreen(
+            CustomScreen(
                 scaleValue = mainViewModel.scaleValue,
                 sizeValue = mainViewModel.sizeValue.value,
                 onEditScale = mainViewModel::editScale,
-                onEditSize = mainViewModel::editSize
+                onEditSize = mainViewModel::editSize,
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
     }
