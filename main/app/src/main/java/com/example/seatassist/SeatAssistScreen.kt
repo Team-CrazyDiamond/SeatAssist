@@ -5,5 +5,6 @@ enum class SeatAssistScreen() {
     Members(),
     Number(),
     Size(),
-    Start()
+    Start(),
+    Usage()
 }

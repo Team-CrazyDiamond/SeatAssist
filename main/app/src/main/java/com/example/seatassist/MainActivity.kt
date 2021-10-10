@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.core.graphics.scaleMatrix
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,7 @@ import com.example.seatassist.ui.members.MembersScreen
 import com.example.seatassist.ui.size.SizeScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
 import com.example.seatassist.ui.start.StartScreen
+import com.example.seatassist.ui.usage.UsageScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 class MainActivity : ComponentActivity() {
@@ -61,7 +63,14 @@ fun SeatAssistNavHost(
     ) {
         composable(route = SeatAssistScreen.Start.name){
             StartScreen(
+                onUsageClick = { navController.navigate(SeatAssistScreen.Usage.name)},
                 onStartClick = { navController.navigate(SeatAssistScreen.Main.name) }
+            )
+        }
+        composable(route = SeatAssistScreen.Usage.name) {
+            // Usage Compose
+            UsageScreen (
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Start.name) }
             )
         }
         composable(route = SeatAssistScreen.Main.name) {
