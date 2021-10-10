@@ -23,6 +23,7 @@ import com.example.seatassist.R
 @ExperimentalMaterialApi
 @Composable
 fun StartScreen(
+    onUsageClick:() -> Unit,
     onStartClick:() -> Unit
 ) {
 
@@ -56,7 +57,7 @@ fun StartScreen(
                 }
             }
             StartButton("Start", onStartClick)    // スタートボタン
-            HowToUse("How to use this App", {}) // 使い方ボタン
+            HowToUse("How to use this App", onUsageClick) // 使い方ボタン
         }
     }
 
