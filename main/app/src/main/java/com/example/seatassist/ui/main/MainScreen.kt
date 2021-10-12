@@ -179,7 +179,7 @@ fun LotteryRestButton() {
     SubText(
         text = "Once you have entered all the information, please click on the lottery button." +
                 " There is also a reset button.",
-        modifier = Modifier.padding(start = 16.dp, end = 19.dp, top = 16.dp)
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
     )
     MainButton(
         text = "Lottery",

@@ -20,6 +20,7 @@ import com.example.seatassist.ui.theme.SeatAssistTheme
 import com.example.seatassist.ui.start.StartScreen
 import com.example.seatassist.ui.usage.UsageScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.rememberPagerState
 
 class MainActivity : ComponentActivity() {
 
@@ -111,8 +112,10 @@ fun SeatAssistNavHost(
             CustomScreen(
                 scaleValue = mainViewModel.scaleValue,
                 sizeValue = mainViewModel.sizeValue.value,
+                color = mainViewModel.color.value,
                 onEditScale = mainViewModel::editScale,
                 onEditSize = mainViewModel::editSize,
+                onEditColor = mainViewModel::editColor,
                 onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
