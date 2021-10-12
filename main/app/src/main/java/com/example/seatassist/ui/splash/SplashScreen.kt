@@ -25,19 +25,19 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(navController: NavController) {
     val scale = remember {
-        Animatable(0f)
+        Animatable(0f)  // 最初のサイズ
     }
-    LaunchedEffect(key1 = true) {
-        scale.animateTo(
-            targetValue = 0.5f,
+    LaunchedEffect(key1 = true) {   // コルーチンのキャンセルはないためkey1はtrue
+        scale.animateTo(    // 拡大，縮小のアニメーション
+            targetValue = 0.5f, // 最終的なサイズ
             animationSpec = tween(
-                durationMillis = 500,
+                durationMillis = 500,   // アニメーションの時間
                 easing = {
-                    OvershootInterpolator(5f).getInterpolation(it)
+                    OvershootInterpolator(5f).getInterpolation(it)  // 中間のサイズ
                 }
             )
         )
-        delay(1800L)
+        delay(1800L)    // 停止時間
         navController.navigate(SeatAssistScreen.Start.name)
     }
     Surface(
@@ -49,7 +49,7 @@ fun SplashScreen(navController: NavController) {
         ) {
             Image(
                 painterResource(id = R.drawable.ic_launcher_sa),
-                contentDescription = "Logo",
+                contentDescription = "Seat Assist Log",
                 modifier = Modifier.scale(scale.value)
             )
         }
