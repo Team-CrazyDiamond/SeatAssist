@@ -4,22 +4,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.core.graphics.scaleMatrix
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.seatassist.ui.custom.CustomScreen
 import com.example.seatassist.ui.main.MainScreen
 import com.example.seatassist.ui.main.MainViewModel
 import com.example.seatassist.ui.members.MembersScreen
-import com.example.seatassist.ui.custom.CustomScreen
-import com.example.seatassist.ui.theme.SeatAssistTheme
 import com.example.seatassist.ui.start.StartScreen
+import com.example.seatassist.ui.theme.SeatAssistTheme
 import com.example.seatassist.ui.usage.UsageScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
 
@@ -41,7 +45,22 @@ class MainActivity : ComponentActivity() {
 @ExperimentalMaterialApi
 @Composable
 fun SeatAssistApp(mainViewModel: MainViewModel) {
+    val pickledBlueWood = Color(0xFF324B54)    // ステータスバー，ナビゲーションバーの色
+    val systemUiController = rememberSystemUiController()
     val navController = rememberNavController()
+    val darkIcons = MaterialTheme.colors.isLight
+    // ステータスバー，ナビゲーションバーの色を指定
+    SideEffect{
+        systemUiController.setSystemBarsColor(
+            color = pickledBlueWood,
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = pickledBlueWood,
+            darkIcons = darkIcons
+        )
+    }
+
     SeatAssistTheme {
         SeatAssistNavHost(
             navController = navController,
