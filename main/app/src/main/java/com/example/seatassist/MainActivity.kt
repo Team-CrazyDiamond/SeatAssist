@@ -10,6 +10,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +19,7 @@ import com.example.seatassist.ui.custom.CustomScreen
 import com.example.seatassist.ui.main.MainScreen
 import com.example.seatassist.ui.main.MainViewModel
 import com.example.seatassist.ui.members.MembersScreen
+import com.example.seatassist.ui.splash.SplashScreen
 import com.example.seatassist.ui.start.StartScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
 import com.example.seatassist.ui.usage.UsageScreen
@@ -80,13 +82,18 @@ fun SeatAssistNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = SeatAssistScreen.Start.name,
+        startDestination = SeatAssistScreen.Splash.name,
         modifier = modifier
     ) {
         composable(route = SeatAssistScreen.Start.name){
             StartScreen(
                 onUsageClick = { navController.navigate(SeatAssistScreen.Usage.name)},
                 onStartClick = { navController.navigate(SeatAssistScreen.Main.name) }
+            )
+        }
+        composable(route = SeatAssistScreen.Splash.name){
+            SplashScreen(
+                navController = navController
             )
         }
         composable(route = SeatAssistScreen.Usage.name) {
