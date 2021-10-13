@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -23,7 +22,6 @@ import com.example.seatassist.ui.start.StartScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
 import com.example.seatassist.ui.usage.UsageScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
