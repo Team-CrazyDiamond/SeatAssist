@@ -11,10 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -88,7 +91,6 @@ fun MainEditText(
     editText: String,
     placeholderText: String,
     onEditText: (String) -> Unit
-
     ) {
     Column {
         Row(
@@ -96,6 +98,7 @@ fun MainEditText(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             val keyboardController = LocalSoftwareKeyboardController.current
+            val focusManager = LocalFocusManager.current
             Text(
                 text = text,
                 style = MaterialTheme.typography.h4,
@@ -105,7 +108,7 @@ fun MainEditText(
             TextField(
                 value = editText,
                 onValueChange = { onEditText(it) },
-                placeholder = { MainPlaceholder(text = placeholderText) },
+                placeholder = { MainPlaceholder(text = placeholderText, fontSize = 15.sp) },
                 textStyle = MaterialTheme.typography.h4.copy(
                     fontSize = 26.sp,
                     textAlign = TextAlign.End,
@@ -121,6 +124,7 @@ fun MainEditText(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
+                    focusManager.clearFocus()
                 })
             )
         }

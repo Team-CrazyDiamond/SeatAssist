@@ -12,7 +12,8 @@ import com.example.seatassist.data.ScaleData
 
 class MainViewModel : ViewModel() {
 
-    var numberText = mutableStateOf("")
+    var numberText = mutableStateOf("0")
+    var numberTextNoneVisi = mutableStateOf(0)
 
     fun editNumber(newNumber: String) {
         numberText.value = newNumber
@@ -62,6 +63,14 @@ class MainViewModel : ViewModel() {
         membersList.add(MembersData(id, mutableStateOf(member)))
     }
 
+    fun addMemberOne(id: Int, member: String) {
+        membersList.add(MembersData(id, mutableStateOf(member)))
+        if (numberText.value.toIntOrNull() != null) {
+            numberText.value = (numberText.value.toInt() + 1).toString()
+            numberTextNoneVisi.value += 1
+        }
+    }
+
     fun removeMember(id: Int) {
         membersList.removeAt(id)
         if (id != membersList.size) {
@@ -69,6 +78,13 @@ class MainViewModel : ViewModel() {
                 membersList[i].id -= 1
             }
         }
+        numberText.value = (numberText.value.toInt() - 1).toString()
+        numberTextNoneVisi.value -= 1
+    }
+
+    fun completionNumber(newNumber: Int) {
+        membersList.clear()
+        numberTextNoneVisi.value = newNumber
     }
 
     fun editName(id: Int, newName: String) {
@@ -78,7 +94,6 @@ class MainViewModel : ViewModel() {
 
     // SizeScreen
     var scaleValue = ScaleData(scale = mutableStateOf(1F), rotation = mutableStateOf(0F))
-
 
     fun editSize(newSize: Dp) {
         sizeValue.value = newSize
