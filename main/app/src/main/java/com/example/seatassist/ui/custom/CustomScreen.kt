@@ -1,6 +1,8 @@
 package com.example.seatassist.ui.custom
 
+import android.util.Log
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
@@ -9,22 +11,33 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
 import com.example.seatassist.data.ScaleData
+import com.example.seatassist.ui.components.MainButton
 import com.example.seatassist.ui.components.MainDivider
 import com.example.seatassist.ui.components.SubText
-import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 @ExperimentalComposeUiApi
 @ExperimentalPagerApi
@@ -32,18 +45,18 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun CustomScreen(
     scaleValue: ScaleData,
     sizeValue: Dp,
+    color: Color,
     onNavigationClick: () -> Unit,
     onEditScale: (Float, Float) -> Unit,
-    onEditSize: (Dp) -> Unit
+    onEditSize: (Dp) -> Unit,
+    onEditColor: (Color) -> Unit
 ) {
     Scaffold(
         topBar = { CustomTopBar(onNavigationClick = onNavigationClick) },
         backgroundColor = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column {
             val state = rememberTransformableState { zoomChange, _, rotationChange ->
                 onEditScale(zoomChange, rotationChange)
             }
@@ -65,32 +78,38 @@ fun CustomScreen(
                 ) {
                     TransformableSample(
                         scaleValue = scaleValue,
-                        sizeValue = sizeValue
+                        sizeValue = sizeValue,
+                        color = color
                     )
                 }
             }
-
-            // ここにカスタムメニューを書く
+            Text(
+                text = "Custom",
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                style = MaterialTheme.typography.h6,
+                fontSize = 34.sp,
+            )
+            SubText(
+                text = "You can customize the sheet here",
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 16.dp
+                )
+            )
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    text = "Custom",
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                    style = MaterialTheme.typography.h6,
-                    fontSize = 34.sp,
-                )
-                SubText(
-                    text = "You can customize the sheet here",
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 8.dp,
-                        bottom = 16.dp
-                    )
-                )
                 CustomMenuSize(sizeValue = sizeValue, onEditSize = onEditSize)
-                CustomMenuItem(text = "Color", onClick = { })
+                CustomMenuColor(onEditColor = onEditColor, color = color)
+                Spacer(modifier = Modifier.size(16.dp))
+                SubText(
+                    text = "When the customization is finished, click the Done button.",
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                )
+                MainButton(text = "Completion", color = MaterialTheme.colors.primary)
+                Spacer(modifier = Modifier.size(16.dp))
             }
         }
     }
@@ -109,21 +128,6 @@ fun CustomTopBar(onNavigationClick: () -> Unit) {
         backgroundColor = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary
     )
-}
-
-@Composable
-fun CustomMenuItem(text: String, onClick: () -> Unit) {
-    Column(
-        modifier = Modifier.clickable(onClick = onClick)
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.h4,
-            fontSize = 20.sp,
-            modifier = Modifier.padding(16.dp)
-        )
-        MainDivider()
-    }
 }
 
 @Composable
@@ -157,14 +161,13 @@ fun CustomMenuSize(
                             color = MaterialTheme.colors.primary,
                             shape = CircleShape
                         ),
-                    elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp)
                 ) {
                     Icon(imageVector = Icons.Outlined.Remove, contentDescription = "minus button")
                 }
                 Text(
                     text = sizeValue.value.toInt().toString(),
                     style = MaterialTheme.typography.h4,
-                    fontSize = 20.sp,
+                    fontSize = 26.sp,
                     modifier = Modifier.padding(16.dp)
                 )
                 FloatingActionButton(
@@ -181,17 +184,63 @@ fun CustomMenuSize(
     }
 }
 
+@ExperimentalPagerApi
+@Composable
+fun CustomMenuColor(
+    colorList: List<Color> = listOf(Color(0xFFDBD2AC), Color.Blue, Color.Red, Color.Green, Color.Yellow),
+    onEditColor: (Color) -> Unit,
+    color: Color,
+) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Color",
+                style = MaterialTheme.typography.h4,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(16.dp)
+            )
+            HorizontalPager(
+                count = 5,
+                modifier = Modifier.width(100.dp),
+                itemSpacing = 8.dp,
+                contentPadding = PaddingValues(8.dp)
+            ) { page ->
+                IconButton(
+                    onClick = {
+                        onEditColor(colorList[page])
+
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Circle,
+                        contentDescription = "Color Icon",
+                        tint = colorList[page],
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+            }
+        }
+        MainDivider()
+    }
+}
+
 @Composable
 fun TransformableSample(
     scaleValue: ScaleData,
-    sizeValue: Dp
+    sizeValue: Dp,
+    color: Color
 ) {
-    Box(
-        Modifier
+    Card(
+        shape = RoundedCornerShape(8.dp),
+        elevation = 8.dp,
+        backgroundColor = color,
+        modifier = Modifier
             .size(sizeValue)
-            .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp))
-            .clip(shape = RoundedCornerShape(8.dp))
-            .graphicsLayer(rotationZ = scaleValue.rotation.value)
-            .background(MaterialTheme.colors.primaryVariant)
+            .graphicsLayer(rotationZ = scaleValue.rotation.value),
+        content = { }
     )
 }

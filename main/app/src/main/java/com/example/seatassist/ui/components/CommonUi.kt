@@ -65,7 +65,8 @@ fun MainButton(
                 backgroundColor = color,
                 contentColor = contentColor
             ),
-            border = BorderStroke(color = borderColor, width = 1.dp)
+            border = BorderStroke(color = borderColor, width = 1.dp),
+            elevation = ButtonDefaults.elevation(defaultElevation = 8.dp)
         ) {
             Text(
                 text = text,

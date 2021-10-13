@@ -93,20 +93,17 @@ class MainViewModel : ViewModel() {
             sizeValue.value.value * newScale > 200F -> {
                 sizeValue.value = 200.dp
                 scaleValue.scale.value = 1F
+                scaleValue.rotation.value += newRotation
             }
             sizeValue.value.value * newScale < 30F -> {
                 sizeValue.value = 30.dp
                 scaleValue.scale.value = 1F
+                scaleValue.rotation.value += newRotation
             }
             else -> {
-                scaleValue.scale.value *= newScale
-                scaleValue.rotation.value += newRotation
                 sizeValue.value *= newScale
+                scaleValue.rotation.value += newRotation
             }
         }
-
-//        scaleValue.scale.value *= newScale
-//        scaleValue.rotation.value += newRotation
-//        sizeValue.value *= newScale
     }
 }
