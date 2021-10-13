@@ -176,11 +176,6 @@ fun MembersItem(
     }
 }
 
-@Composable
-fun MembersAddButton() {
-
-}
-
 @ExperimentalComposeUiApi
 @Composable
 fun MembersNumber(
