@@ -124,10 +124,14 @@ fun SeatAssistNavHost(
             // Members Compose
             MembersScreen(
                 numberText = mainViewModel.numberText.value,
+                numberTextNoneVisi = mainViewModel.numberTextNoneVisi.value,
                 membersList = mainViewModel.membersList,
                 onAddMember = mainViewModel::addMember,
+                onAddMemberOne = mainViewModel::addMemberOne,
                 onRemoveMember = mainViewModel::removeMember,
                 onEditName = mainViewModel::editName,
+                onEditNumber = mainViewModel::editNumber,
+                onCompletionNumber = mainViewModel::completionNumber,
                 onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
