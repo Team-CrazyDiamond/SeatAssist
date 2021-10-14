@@ -2,7 +2,6 @@ package com.example.seatassist.ui.usage
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,15 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.scaleMatrix
 import com.example.seatassist.R
 import com.example.seatassist.data.UsageData
 import com.example.seatassist.ui.components.SubText
@@ -42,30 +36,29 @@ fun UsageScreen(
 
     {
         UsageCardsList(
-            cordsList = listOf(
-                UsageData("Screen1", "This cord is description of screen1.",R.drawable.usage_1),
-                UsageData("Screen2", "This cord is description of screen2.",R.drawable.usage_1),
-                UsageData("Screen3", "This cord is description of screen3.",R.drawable.usage_1),
-                UsageData("Screen4", "This cord is description of screen4.",R.drawable.usage_1),
-                UsageData("Screen5", "This cord is description of screen5.",R.drawable.usage_1)
+            cardsList = listOf(
+                UsageData("Screen1", "This cord is description of screen1.", R.drawable.usage_1),
+                UsageData("Screen2", "This cord is description of screen2.", R.drawable.usage_1),
+                UsageData("Screen3", "This cord is description of screen3.", R.drawable.usage_1),
+                UsageData("Screen4", "This cord is description of screen4.", R.drawable.usage_1),
+                UsageData("Screen5", "This cord is description of screen5.", R.drawable.usage_1)
             )
         )
     }
 }
 
+/**
+ * 使い方カードをHorizontal pagerによって表示
+ * @param cardsList 使い方カードの情報が入ったリスト
+ */
 @ExperimentalPagerApi
 @Composable
 fun UsageCardsList(
-    cordsList: List<UsageData>
+    cardsList: List<UsageData>
 ) {
     Column {
         Row(
-            modifier = Modifier
-                .padding(
-                    start = 20.dp,
-                    end = 20.dp,
-                    bottom = 40.dp
-                ),
+            modifier = Modifier.padding(bottom = 40.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -74,9 +67,9 @@ fun UsageCardsList(
                 itemSpacing = 10.dp
             ) { page ->
                 UsageCard(
-                    cordsList[page].name,
-                    cordsList[page].description,
-                    cordsList[page].id
+                    cardsList[page].name,
+                    cardsList[page].description,
+                    cardsList[page].id
                 )
             }
         }
@@ -123,7 +116,7 @@ fun UsageCard(
                 painter = painterResource(id = imgId),
                 contentDescription = "usage card $cardName",
                 modifier = Modifier
-                    .shadow(shape = CircleShape,elevation = 0.dp)
+                    .shadow(shape = CircleShape, elevation = 0.dp)
                     .size(width = 259.dp, height = 555.dp)
                     .clip(shape = RoundedCornerShape(1.dp))
                     .border(BorderStroke(5.dp, MaterialTheme.colors.onPrimary))
@@ -133,6 +126,10 @@ fun UsageCard(
     }
 }
 
+/**
+ * アプリのトップバー
+ * @param onNavigationClick 戻るボタンが押された時の処理
+ */
 @Composable
 fun UsageTopBar(onNavigationClick: () -> Unit) {
     TopAppBar(
