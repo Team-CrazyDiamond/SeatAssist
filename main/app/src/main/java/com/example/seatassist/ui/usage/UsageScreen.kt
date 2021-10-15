@@ -22,6 +22,8 @@ import com.example.seatassist.data.UsageData
 import com.example.seatassist.ui.components.SubText
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 
 @ExperimentalPagerApi
 @Composable
@@ -33,9 +35,8 @@ fun UsageScreen(
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
     )
-
     {
-        UsageCardsList(
+        UsageCardView(
             cardsList = listOf(
                 UsageData("Screen1", "This cord is description of screen1.", R.drawable.usage_1),
                 UsageData("Screen2", "This cord is description of screen2.", R.drawable.usage_1),
@@ -53,26 +54,43 @@ fun UsageScreen(
  */
 @ExperimentalPagerApi
 @Composable
-fun UsageCardsList(
-    cardsList: List<UsageData>
-) {
-    Column {
-        Row(
-            modifier = Modifier.padding(bottom = 40.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HorizontalPager(
-                count = 5,
-                itemSpacing = 10.dp
-            ) { page ->
-                UsageCard(
-                    cardsList[page].name,
-                    cardsList[page].description,
-                    cardsList[page].id
-                )
-            }
+fun UsageCardView(cardsList: List<UsageData>) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        val pagerState = rememberPagerState()
+
+        // カードの表示
+        HorizontalPager(
+            count = 5,
+            state = pagerState,
+            itemSpacing = 20.dp,
+            // 水平パディングをページの中央に追加
+            contentPadding = PaddingValues(horizontal = 32.dp),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+        ) { page ->
+            UsageCard(
+                cardsList[page].name,
+                cardsList[page].description,
+                cardsList[page].id
+            )
         }
+
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(16.dp)
+        )
+
+        // TODO : ActionsRowを使えるようにする
+//        ActionsRow(
+//            pagerState = pagerState,
+//            modifier = Modifier.align(Alignment.CenterHorizontally)
+//        )
     }
 }
 
@@ -88,10 +106,11 @@ fun UsageCard(
     description: String,
     imgId: Int
 ) {
-    Surface(
+    Card(
         shape = RoundedCornerShape(8.dp),
-        color = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.onPrimary
+        backgroundColor = MaterialTheme.colors.primary,
+        contentColor = MaterialTheme.colors.onPrimary,
+        elevation = 3.dp
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -116,9 +135,14 @@ fun UsageCard(
                 painter = painterResource(id = imgId),
                 contentDescription = "usage card $cardName",
                 modifier = Modifier
-                    .shadow(shape = CircleShape, elevation = 0.dp)
-                    .size(width = 259.dp, height = 555.dp)
+                    .padding(
+                        start = 32.dp,
+                        end = 32.dp,
+                        bottom = 16.dp
+                    )
                     .clip(shape = RoundedCornerShape(1.dp))
+                    .shadow(shape = CircleShape, elevation = 0.dp)
+                    .size(width = 266.dp, height = 570.dp)
                     .border(BorderStroke(5.dp, MaterialTheme.colors.onPrimary))
             )
         }
