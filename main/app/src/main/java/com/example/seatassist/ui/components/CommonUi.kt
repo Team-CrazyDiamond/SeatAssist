@@ -2,27 +2,21 @@ package com.example.seatassist.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeCompilerApi
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,9 +24,13 @@ import kotlin.math.max
 
 /**
 メニュータイトル
-**/
+ **/
 @Composable
-fun MainPlaceholder(text: String, textAlign: TextAlign = TextAlign.End, fontSize: TextUnit = 16.sp) {
+fun MainPlaceholder(
+    text: String,
+    textAlign: TextAlign = TextAlign.End,
+    fontSize: TextUnit = 16.sp
+) {
     Text(
         text = text,
         modifier = Modifier.fillMaxWidth(),
@@ -45,7 +43,7 @@ fun MainPlaceholder(text: String, textAlign: TextAlign = TextAlign.End, fontSize
 
 /**
 メニュー内のボタン
-**/
+ **/
 @Composable
 fun MainButton(
     text: String,
@@ -91,7 +89,7 @@ fun MainEditText(
     editText: String,
     placeholderText: String,
     onEditText: (String) -> Unit
-    ) {
+) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -134,7 +132,7 @@ fun MainEditText(
 
 /**
 メインメニューの分断ライン
-**/
+ **/
 @Composable
 fun MainDivider() {
     Divider(
@@ -147,7 +145,7 @@ fun MainDivider() {
 
 /**
 メニューの説明文（少し薄いやつ）
-**/
+ **/
 @Composable
 fun SubText(
     text: String,
@@ -188,7 +186,8 @@ fun MembersCustomLayout(
             .coerceIn(constraints.minWidth.rangeTo(constraints.maxWidth))
 
         val height = columnHeight.maxOrNull()
-            ?.coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight)) ?: constraints.minHeight
+            ?.coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
+            ?: constraints.minHeight
 
         val columnX = IntArray(columns) { 0 }
         for (i in 1 until columns) {
@@ -210,4 +209,47 @@ fun MembersCustomLayout(
             }
         }
     }
+}
+
+@Composable
+fun SAAlertDialog(
+    title: String,
+    text: String,
+    primaryColor: Color,
+    onPrimaryColor: Color,
+    openDialog: MutableState<Boolean>
+) {
+    AlertDialog(
+        onDismissRequest = { },
+        backgroundColor = primaryColor,
+        shape = RoundedCornerShape(10.dp),
+        title = {
+            Text(
+                text = title,
+                color = onPrimaryColor,
+                fontSize = 20.sp,
+
+                )
+        },
+        text = {
+            Text(
+                text = text,
+                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    openDialog.value = false
+                }
+            ) {
+                Text(
+                    text = "OK",
+                    color = onPrimaryColor,
+                    fontSize = 15.sp
+                )
+            }
+        },
+        dismissButton = null
+    )
 }
