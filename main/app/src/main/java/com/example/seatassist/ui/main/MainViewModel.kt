@@ -26,10 +26,11 @@ class MainViewModel : ViewModel() {
 
     var color = mutableStateOf(Color(0xFFDBD2AC))
 
-    fun addObject(id: Int, OffsetX: Float, OffsetY: Float, color: Color, size: Dp) {
+    fun addObject(id: Int, name:String, OffsetX: Float, OffsetY: Float, color: Color, size: Dp) {
         offsetList.add(
             OffsetData(
                 id,
+                name,
                 mutableStateOf(OffsetX),
                 mutableStateOf(OffsetY),
                 color,
@@ -120,5 +121,11 @@ class MainViewModel : ViewModel() {
                 scaleValue.rotation.value += newRotation
             }
         }
+    }
+
+
+    // Lottery Screen
+    fun shuffleList() {
+        membersList.shuffle()
     }
 }

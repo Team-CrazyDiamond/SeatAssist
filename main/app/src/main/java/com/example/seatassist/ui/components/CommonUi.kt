@@ -1,26 +1,39 @@
 package com.example.seatassist.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 /**
 メニュータイトル
@@ -76,6 +89,36 @@ fun MainButton(
                 style = MaterialTheme.typography.h4
             )
         }
+    }
+}
+
+/**
+抽選後画面のBottomAppBarのButton
+ **/
+@Composable
+fun BottomBarButton(
+    text: String,
+    icon: ImageVector,
+    contentDescription: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            modifier = Modifier.size(30.dp)
+        )
+        Text(
+            text = text,
+            modifier = Modifier.padding(start = 8.dp),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.h4,
+            fontSize = 28.sp,
+        )
     }
 }
 
@@ -159,6 +202,65 @@ fun SubText(
     )
 }
 
+/**
+ドラッグ可能なオブジェクト
+ **/
+@Composable
+fun DragBox(
+    id: Int,
+    color: Color,
+    offsetX: Float,
+    offsetY: Float,
+    sizeValue: Dp,
+    onMoveOffsetX: (Int, Float) -> Unit,
+    onMoveOffsetY: (Int, Float) -> Unit,
+    onRemoveObject: (Int) -> Unit = { },
+    dragBoxContent: @Composable () -> Unit
+) {
+    Surface(
+        color = color,
+        shape = RoundedCornerShape(8.dp),
+        elevation = 8.dp,
+        modifier = Modifier
+            .offset { IntOffset(x = offsetX.roundToInt(), y = offsetY.roundToInt()) }
+            .size(sizeValue)
+            .pointerInput(Unit) {
+                detectDragGestures { change, dragAmount ->
+                    change.consumeAllChanges()
+                    onMoveOffsetX(id, dragAmount.x)
+                    onMoveOffsetY(id, dragAmount.y)
+                }
+            }
+            .pointerInput(Unit) {
+                detectTapGestures(onDoubleTap = { onRemoveObject(id) })
+            },
+        content = dragBoxContent
+    )
+}
+
+/**
+共通のTopBar
+ **/
+@Composable
+fun CommonTopBar(
+    onNavigationClick: () -> Unit,
+    title: String,
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+) {
+    TopAppBar(
+        title = { Text(text = title) },
+        navigationIcon = {
+            IconButton(onClick = { onNavigationClick() }) {
+                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
+            }
+        },
+        elevation = 0.dp,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor
+    )
+}
+
 @Composable
 fun MembersCustomLayout(
     modifier: Modifier = Modifier,
@@ -210,6 +312,7 @@ fun MembersCustomLayout(
         }
     }
 }
+
 
 @Composable
 fun SAAlertDialog(
