@@ -26,7 +26,7 @@ class MainViewModel : ViewModel() {
 
     var color = mutableStateOf(Color(0xFFDBD2AC))
 
-    fun addObject(id: Int, name:String, OffsetX: Float, OffsetY: Float, color: Color, size: Dp) {
+    fun addObject(id: Int, name: String, OffsetX: Float, OffsetY: Float, color: Color, size: Dp) {
         offsetList.add(
             OffsetData(
                 id,
@@ -127,5 +127,11 @@ class MainViewModel : ViewModel() {
     // Lottery Screen
     fun shuffleList() {
         membersList.shuffle()
+    }
+
+
+    // Number Screen
+    fun noChangeMembers() {
+        numberText.value = numberTextNoneVisi.value.toString()
     }
 }

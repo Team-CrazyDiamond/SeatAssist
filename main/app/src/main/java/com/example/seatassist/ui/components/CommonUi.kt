@@ -11,24 +11,17 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
@@ -42,7 +35,8 @@ import kotlin.math.roundToInt
 fun MainPlaceholder(
     text: String,
     textAlign: TextAlign = TextAlign.End,
-    fontSize: TextUnit = 16.sp
+    fontSize: TextUnit = 16.sp,
+    color: Color = MaterialTheme.colors.primary
 ) {
     Text(
         text = text,
@@ -50,7 +44,7 @@ fun MainPlaceholder(
         textAlign = textAlign,
         style = MaterialTheme.typography.h4,
         fontSize = fontSize,
-        color = MaterialTheme.colors.primary.copy(alpha = ContentAlpha.medium)
+        color = color.copy(alpha = ContentAlpha.medium)
     )
 }
 
@@ -80,7 +74,8 @@ fun MainButton(
                 contentColor = contentColor
             ),
             border = BorderStroke(color = borderColor, width = 1.dp),
-            elevation = ButtonDefaults.elevation(defaultElevation = 8.dp)
+            elevation = ButtonDefaults.elevation(defaultElevation = 8.dp),
+            shape = RoundedCornerShape(8.dp)
         ) {
             Text(
                 text = text,
@@ -192,12 +187,14 @@ fun MainDivider() {
 @Composable
 fun SubText(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = text,
         color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         style = MaterialTheme.typography.caption,
+        textAlign = textAlign,
         modifier = modifier
     )
 }
