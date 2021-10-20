@@ -178,7 +178,13 @@ fun CustomMenuSize(
 @ExperimentalPagerApi
 @Composable
 fun CustomMenuColor(
-    colorList: List<Color> = listOf(Color(0xFFDBD2AC), Color.Blue, Color.Red, Color.Green, Color.Yellow),
+    colorList: List<Color> = listOf(
+        Color(0xFFDBD2AC),
+        Color(0xFF9990FF),
+        Color(0xFFFF9090),
+        Color(0xFFBAFFA2),
+        Color(0xFFFDFF9E)
+    ),
     onEditColor: (Color) -> Unit,
     color: Color,
 ) {

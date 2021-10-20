@@ -21,3 +21,9 @@ data class ScaleData(
     var scale: MutableState<Float>,
     var rotation: MutableState<Float>
 )
+
+data class UsageData(
+    var name: String,
+    var description: String,
+    var id: Int
+)
