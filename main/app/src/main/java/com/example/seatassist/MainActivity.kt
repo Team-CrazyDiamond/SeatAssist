@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.seatassist.ui.custom.CustomScreen
+import com.example.seatassist.ui.lottery.LotteryScreen
 import com.example.seatassist.ui.main.MainScreen
 import com.example.seatassist.ui.main.MainViewModel
 import com.example.seatassist.ui.members.MembersScreen
@@ -115,8 +116,10 @@ fun SeatAssistNavHost(
                 onMoveOffsetX = mainViewModel::moveOffsetX,
                 onMoveOffsetY = mainViewModel::moveOffsetY,
                 onMembersClick = { navController.navigate(SeatAssistScreen.Members.name) },
-                onSizeClick = { navController.navigate(SeatAssistScreen.Size.name) },
-                onEditNumber = mainViewModel::editNumber
+                onSizeClick = { navController.navigate(SeatAssistScreen.Custom.name) },
+                onEditNumber = mainViewModel::editNumber,
+                onShuffleList = mainViewModel::shuffleList,
+                onLotteryClick = { navController.navigate(SeatAssistScreen.Lottery.name) }
 
             )
         }
@@ -135,8 +138,8 @@ fun SeatAssistNavHost(
                 onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
-        composable(route = SeatAssistScreen.Size.name) {
-            // Size Compose
+        composable(route = SeatAssistScreen.Custom.name) {
+            // Custom Compose
             CustomScreen(
                 scaleValue = mainViewModel.scaleValue,
                 sizeValue = mainViewModel.sizeValue.value,
@@ -144,6 +147,17 @@ fun SeatAssistNavHost(
                 onEditScale = mainViewModel::editScale,
                 onEditSize = mainViewModel::editSize,
                 onEditColor = mainViewModel::editColor,
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
+            )
+        }
+        composable(route = SeatAssistScreen.Lottery.name) {
+            // Lottery Compose
+            LotteryScreen(
+                membersList = mainViewModel.membersList,
+                offsetList = mainViewModel.offsetList,
+                onMoveOffsetX = mainViewModel::moveOffsetX,
+                onMoveOffsetY = mainViewModel::moveOffsetY,
+                onShuffleList = mainViewModel::shuffleList,
                 onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }

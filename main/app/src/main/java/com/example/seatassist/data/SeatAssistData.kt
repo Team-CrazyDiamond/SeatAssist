@@ -11,6 +11,7 @@ data class MembersData(
 
 data class OffsetData(
     var id: Int,
+    var name: String,
     var offsetX: MutableState<Float>,
     var offsetY: MutableState<Float>,
     var color: Color,

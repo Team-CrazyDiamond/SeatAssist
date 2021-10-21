@@ -39,26 +39,30 @@ fun MainScreen(
     sizeValue: Dp,
     scaleValue: ScaleData,
     dragColor: Color,
-    menu: List<String> = listOf("Number of seats", "Members", "Seats size"),
+    menu: List<String> = listOf("Number of seats", "Members", "Custom"),
     offsetList: List<OffsetData>,
     onMembersClick: () -> Unit,
     onSizeClick: () -> Unit,
     onEditNumber: (String) -> Unit,
-    onAddObject: (Int, Float, Float, Color, Dp) -> Unit,
+    onAddObject: (Int, String, Float, Float, Color, Dp) -> Unit,
     onRemoveObject: (Int) -> Unit,
     onMoveOffsetX: (Int, Float) -> Unit,
-    onMoveOffsetY: (Int, Float) -> Unit
+    onMoveOffsetY: (Int, Float) -> Unit,
+    onShuffleList: () -> Unit,
+    onLotteryClick: () -> Unit
 ) {
     BackdropScaffold(
         appBar = { },
         backLayerContent = {
             Box(
                 modifier = Modifier
+                    .padding(16.dp)
                     .fillMaxSize()
                     .pointerInput(Unit) {
                         detectTapGestures {
                             onAddObject(
                                 offsetList.size,
+                                "",
                                 it.x,
                                 it.y,
                                 dragColor,
@@ -67,7 +71,6 @@ fun MainScreen(
                         }
                     }
             ) {
-                // 操作画面をここに記述
                 offsetList.forEach { offsetData ->
                     DragBox(
                         id = offsetData.id,
@@ -77,7 +80,8 @@ fun MainScreen(
                         sizeValue = offsetData.size,
                         onMoveOffsetX = onMoveOffsetX,
                         onMoveOffsetY = onMoveOffsetY,
-                        onRemoveObject = onRemoveObject
+                        onRemoveObject = onRemoveObject,
+                        dragBoxContent = {  }
                     )
                 }
             }
@@ -110,7 +114,7 @@ fun MainScreen(
                 MainMenuItem(text = menu[1], onClick = onMembersClick)
                 MainMenuItem(text = menu[2], onClick = onSizeClick)
                 Spacer(modifier = Modifier.size(16.dp))
-                LotteryRestButton()
+                LotteryRestButton(onShuffleList = onShuffleList, onLotteryClick = onLotteryClick)
             }
         },
         scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed),
@@ -142,40 +146,10 @@ fun MainMenuItem(text: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun DragBox(
-    id: Int,
-    color: Color,
-    offsetX: Float,
-    offsetY: Float,
-    sizeValue: Dp,
-    onMoveOffsetX: (Int, Float) -> Unit,
-    onMoveOffsetY: (Int, Float) -> Unit,
-    onRemoveObject: (Int) -> Unit
+fun LotteryRestButton(
+    onShuffleList: () -> Unit,
+    onLotteryClick: () -> Unit
 ) {
-    Surface(
-        color = color,
-        shape = RoundedCornerShape(8.dp),
-        elevation = 8.dp,
-        modifier = Modifier
-            .offset { IntOffset(x = offsetX.roundToInt(), y = offsetY.roundToInt()) }
-            .size(sizeValue)
-            .pointerInput(Unit) {
-                detectDragGestures { change, dragAmount ->
-                    change.consumeAllChanges()
-                    onMoveOffsetX(id, dragAmount.x)
-                    onMoveOffsetY(id, dragAmount.y)
-                }
-            }
-            .pointerInput(Unit) {
-                detectTapGestures(onDoubleTap = { onRemoveObject(id) })
-            }
-    ) {
-        // 名前を記述する処理
-    }
-}
-
-@Composable
-fun LotteryRestButton() {
     SubText(
         text = "Once you have entered all the information, please click on the lottery button." +
                 " There is also a reset button.",
@@ -184,6 +158,10 @@ fun LotteryRestButton() {
     MainButton(
         text = "Lottery",
         color = MaterialTheme.colors.primary,
+        onClick = {
+            onShuffleList()
+            onLotteryClick()
+        }
     )
     MainButton(
         text = "Reset",
