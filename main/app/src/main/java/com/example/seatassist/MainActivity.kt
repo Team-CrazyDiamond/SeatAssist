@@ -10,7 +10,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +19,7 @@ import com.example.seatassist.ui.lottery.LotteryScreen
 import com.example.seatassist.ui.main.MainScreen
 import com.example.seatassist.ui.main.MainViewModel
 import com.example.seatassist.ui.members.MembersScreen
+import com.example.seatassist.ui.members.NumberScreen
 import com.example.seatassist.ui.splash.SplashScreen
 import com.example.seatassist.ui.start.StartScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
@@ -52,7 +52,7 @@ fun SeatAssistApp(mainViewModel: MainViewModel) {
     val navController = rememberNavController()
     val darkIcons = MaterialTheme.colors.isLight
     // ステータスバー，ナビゲーションバーの色を指定
-    SideEffect{
+    SideEffect {
         systemUiController.setSystemBarsColor(
             color = pickledBlueWood,
             darkIcons = darkIcons
@@ -86,20 +86,20 @@ fun SeatAssistNavHost(
         startDestination = SeatAssistScreen.Splash.name,
         modifier = modifier
     ) {
-        composable(route = SeatAssistScreen.Start.name){
+        composable(route = SeatAssistScreen.Start.name) {
             StartScreen(
-                onUsageClick = { navController.navigate(SeatAssistScreen.Usage.name)},
+                onUsageClick = { navController.navigate(SeatAssistScreen.Usage.name) },
                 onStartClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
-        composable(route = SeatAssistScreen.Splash.name){
+        composable(route = SeatAssistScreen.Splash.name) {
             SplashScreen(
                 navController = navController
             )
         }
         composable(route = SeatAssistScreen.Usage.name) {
             // Usage Compose
-            UsageScreen (
+            UsageScreen(
                 onNavigationClick = { navController.navigate(SeatAssistScreen.Start.name) }
             )
         }
@@ -133,11 +133,20 @@ fun SeatAssistNavHost(
                 onAddMemberOne = mainViewModel::addMemberOne,
                 onRemoveMember = mainViewModel::removeMember,
                 onEditName = mainViewModel::editName,
-                onEditNumber = mainViewModel::editNumber,
-                onCompletionNumber = mainViewModel::completionNumber,
-                onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) },
+                onNumberNavigation = { navController.navigate(SeatAssistScreen.MembersNumber.name) }
             )
         }
+        composable(route = SeatAssistScreen.MembersNumber.name) {
+            NumberScreen(
+                numberText = mainViewModel.numberText.value,
+                onEditNumber = mainViewModel::editNumber,
+                onCompletionNumber = mainViewModel::completionNumber,
+                onNoChangeMembers = mainViewModel::noChangeMembers,
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Members.name) }
+            )
+        }
+
         composable(route = SeatAssistScreen.Custom.name) {
             // Custom Compose
             CustomScreen(

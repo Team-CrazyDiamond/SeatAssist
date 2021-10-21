@@ -1,5 +1,6 @@
 package com.example.seatassist.ui.members
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,7 +24,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.MembersData
-import com.example.seatassist.ui.components.*
+import com.example.seatassist.ui.components.MainButton
+import com.example.seatassist.ui.components.MainPlaceholder
+import com.example.seatassist.ui.components.MembersCustomLayout
+import com.example.seatassist.ui.components.SubText
 
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
@@ -35,9 +40,8 @@ fun MembersScreen(
     onAddMemberOne: (Int, String) -> Unit,
     onRemoveMember: (Int) -> Unit,
     onEditName: (Int, String) -> Unit,
-    onEditNumber: (String) -> Unit,
-    onCompletionNumber: (Int) -> Unit,
-    onNavigationClick: () -> Unit
+    onNavigationClick: () -> Unit,
+    onNumberNavigation: () -> Unit
 ) {
     BackdropScaffold(
         appBar = {
@@ -71,8 +75,8 @@ fun MembersScreen(
         frontLayerContent = {
             MembersNumber(
                 numberText = numberText,
-                onEditNumber = onEditNumber,
-                onCompletionNumber = onCompletionNumber
+                onNavigationClick = onNavigationClick,
+                onNumberNavigation = onNumberNavigation
             )
         },
         scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed),
@@ -85,7 +89,6 @@ fun MembersScreen(
         frontLayerScrimColor = Color.Unspecified,
         frontLayerShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         frontLayerElevation = 8.dp
-
     )
 }
 
@@ -126,7 +129,8 @@ fun MembersItem(
     val focusManager = LocalFocusManager.current
 
     BoxWithConstraints {
-        val itemWidth = ((with(LocalDensity.current) { constraints.maxWidth.toDp()}).value * 0.3).dp
+        val itemWidth =
+            ((with(LocalDensity.current) { constraints.maxWidth.toDp() }).value * 0.3).dp
 
         Surface(
             shape = RoundedCornerShape(8.dp),
@@ -142,13 +146,19 @@ fun MembersItem(
                     value = name,
                     onValueChange = { onEditName(id, it) },
                     modifier = Modifier.weight(8F),
-                    placeholder = { MainPlaceholder(text = "Input text", textAlign = TextAlign.Start, fontSize = 15.sp) },
+                    placeholder = {
+                        MainPlaceholder(
+                            text = "Input text",
+                            textAlign = TextAlign.Start,
+                            fontSize = 15.sp
+                        )
+                    },
                     textStyle = MaterialTheme.typography.h4.copy(
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
                     ),
                     singleLine = true,
-                    colors =  TextFieldDefaults.textFieldColors(
+                    colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
@@ -180,8 +190,8 @@ fun MembersItem(
 @Composable
 fun MembersNumber(
     numberText: String,
-    onEditNumber: (String) -> Unit,
-    onCompletionNumber: (Int) -> Unit
+    onNavigationClick: () -> Unit,
+    onNumberNavigation: () -> Unit
 ) {
     Column {
         Text(
@@ -199,18 +209,49 @@ fun MembersNumber(
                 bottom = 16.dp
             )
         )
-        MainEditText(
-            text = "Number of members",
-            editText = if (numberText == "0") "" else numberText,
-            placeholderText = "Input number",
-            onEditText = onEditNumber
-        )
+        MembersNumberItem(numberText = numberText, onNumberNavigation = onNumberNavigation)
         MainButton(
             text = "Completion",
             color = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onPrimary,
             borderColor = MaterialTheme.colors.onPrimary,
-            onClick = { onCompletionNumber(numberText.toInt()) }
+            onClick = { onNavigationClick() }
         )
+    }
+}
+
+@Composable
+fun MembersNumberItem(
+    numberText: String,
+    onNumberNavigation: () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onNumberNavigation() }
+    ) {
+        Text(
+            text = "Number of members",
+            style = MaterialTheme.typography.h4,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(16.dp)
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = numberText,
+                style = MaterialTheme.typography.h4,
+                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                fontSize = 20.sp,
+                modifier = Modifier.padding(16.dp)
+            )
+            Icon(
+                imageVector = Icons.Filled.ArrowForwardIos,
+                contentDescription = "number of members",
+                tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+            )
+        }
     }
 }
