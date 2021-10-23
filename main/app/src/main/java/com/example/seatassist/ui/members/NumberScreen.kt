@@ -1,13 +1,14 @@
 package com.example.seatassist.ui.members
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -80,6 +81,18 @@ fun NumberMemberEdit(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+    val openDialogNumber = remember { mutableStateOf(false) }
+    if (openDialogNumber.value) {
+        SAWarningDialog(
+            title = "Warning",
+            text = "Is it okay that the members I have entered will be reset?",
+            numberText = numberText,
+            openDialog = openDialogNumber,
+            onCompletionNumber = onCompletionNumber,
+            onEditNumber = onEditNumber,
+            onNavigationClick = onNavigationClick
+        )
+    }
     TextField(
         value = if (numberText == "0") "" else numberText,
         onValueChange = { onEditNumber(it) },
@@ -114,9 +127,81 @@ fun NumberMemberEdit(
         text = "Change members",
         color = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary,
-        onClick = {
-            onCompletionNumber(numberText.toInt())
-            onNavigationClick()
-        }
+        onClick = { openDialogNumber.value = true }
+    )
+}
+
+@Composable
+fun SAWarningDialog(
+    title: String,
+    text: String,
+    numberText: String,
+    primaryColor: Color = MaterialTheme.colors.primary,
+    onPrimaryColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+    openDialog: MutableState<Boolean>,
+    onCompletionNumber: (Int) -> Unit,
+    onEditNumber: (String) -> Unit,
+    onNavigationClick: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = { },
+        backgroundColor = primaryColor,
+        shape = RoundedCornerShape(10.dp),
+        title = {
+            Text(
+                text = title,
+                color = onPrimaryColor,
+                fontSize = 20.sp,
+                style = MaterialTheme.typography.h6
+            )
+        },
+        text = {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.h4,
+                fontSize = 15.sp,
+                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+            )
+        },
+        confirmButton = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text(
+                        text = "Cancel",
+                        color = onPrimaryColor,
+                        style = MaterialTheme.typography.h4,
+                        fontSize = 20.sp
+                    )
+                }
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                        println(numberText)
+                        if (numberText.isEmpty()) {
+                            onEditNumber("0")
+                            onCompletionNumber(0)
+                        } else {
+                            onCompletionNumber(numberText.toInt())
+                        }
+                        onNavigationClick()
+                    }
+                ) {
+                    Text(
+                        text = "OK",
+                        color = onPrimaryColor,
+                        style = MaterialTheme.typography.h4,
+                        fontSize = 20.sp
+                    )
+                }
+            }
+        },
+        dismissButton = null
     )
 }
