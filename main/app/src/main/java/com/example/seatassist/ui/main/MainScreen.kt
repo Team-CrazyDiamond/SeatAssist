@@ -1,32 +1,26 @@
 package com.example.seatassist.ui.main
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.data.ScaleData
 import com.example.seatassist.ui.components.*
-import kotlin.math.roundToInt
 
 /**
 
@@ -40,6 +34,7 @@ fun MainScreen(
     scaleValue: ScaleData,
     dragColor: Color,
     menu: List<String> = listOf("Number of seats", "Members", "Custom"),
+    membersList: List<MembersData>,
     offsetList: List<OffsetData>,
     onMembersClick: () -> Unit,
     onSizeClick: () -> Unit,
@@ -81,7 +76,7 @@ fun MainScreen(
                         onMoveOffsetX = onMoveOffsetX,
                         onMoveOffsetY = onMoveOffsetY,
                         onRemoveObject = onRemoveObject,
-                        dragBoxContent = {  }
+                        dragBoxContent = { }
                     )
                 }
             }
@@ -114,7 +109,12 @@ fun MainScreen(
                 MainMenuItem(text = menu[1], onClick = onMembersClick)
                 MainMenuItem(text = menu[2], onClick = onSizeClick)
                 Spacer(modifier = Modifier.size(16.dp))
-                LotteryRestButton(onShuffleList = onShuffleList, onLotteryClick = onLotteryClick)
+                LotteryRestButton(
+                    onShuffleList = onShuffleList,
+                    onLotteryClick = onLotteryClick,
+                    membersList = membersList.map { it.name.value },
+                    offsetList = offsetList
+                )
             }
         },
         scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed),
@@ -148,8 +148,26 @@ fun MainMenuItem(text: String, onClick: () -> Unit) {
 @Composable
 fun LotteryRestButton(
     onShuffleList: () -> Unit,
-    onLotteryClick: () -> Unit
+    onLotteryClick: () -> Unit,
+    membersList: List<String>,
+    offsetList: List<OffsetData>
 ) {
+    val openDialogMembers = remember { mutableStateOf(false) }
+    val openDialogObject = remember { mutableStateOf(false) }
+    if (openDialogMembers.value) {
+        SAAlertDialog(
+            title = "All members have not registered yet.",
+            text = "Fill in the fields for all members",
+            openDialog = openDialogMembers
+        )
+    }
+    if (openDialogObject.value) {
+        SAAlertDialog(
+            title = "The number of seats does not match the number of members",
+            text = "Edit the number of seats and the number of members again.",
+            openDialog = openDialogObject
+        )
+    }
     SubText(
         text = "Once you have entered all the information, please click on the lottery button." +
                 " There is also a reset button.",
@@ -159,8 +177,14 @@ fun LotteryRestButton(
         text = "Lottery",
         color = MaterialTheme.colors.primary,
         onClick = {
-            onShuffleList()
-            onLotteryClick()
+            if (membersList.contains("") || membersList.isEmpty()) {
+                openDialogMembers.value = true
+            } else if (membersList.size != offsetList.size || offsetList.isEmpty()) {
+                openDialogObject.value = true
+            } else {
+                onShuffleList()
+                onLotteryClick()
+            }
         }
     )
     MainButton(

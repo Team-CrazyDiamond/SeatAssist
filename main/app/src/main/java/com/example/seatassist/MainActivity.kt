@@ -110,6 +110,7 @@ fun SeatAssistNavHost(
                 sizeValue = mainViewModel.sizeValue.value,
                 scaleValue = mainViewModel.scaleValue,
                 dragColor = mainViewModel.color.value,
+                membersList = mainViewModel.membersList,
                 offsetList = mainViewModel.offsetList,
                 onAddObject = mainViewModel::addObject,
                 onRemoveObject = mainViewModel::removeObject,
@@ -120,7 +121,6 @@ fun SeatAssistNavHost(
                 onEditNumber = mainViewModel::editNumber,
                 onShuffleList = mainViewModel::shuffleList,
                 onLotteryClick = { navController.navigate(SeatAssistScreen.Lottery.name) }
-
             )
         }
         composable(route = SeatAssistScreen.Members.name) {

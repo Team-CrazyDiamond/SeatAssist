@@ -315,8 +315,8 @@ fun MembersCustomLayout(
 fun SAAlertDialog(
     title: String,
     text: String,
-    primaryColor: Color,
-    onPrimaryColor: Color,
+    primaryColor: Color = MaterialTheme.colors.primary,
+    onPrimaryColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
     openDialog: MutableState<Boolean>
 ) {
     AlertDialog(
@@ -328,13 +328,15 @@ fun SAAlertDialog(
                 text = title,
                 color = onPrimaryColor,
                 fontSize = 20.sp,
-
-                )
+                style = MaterialTheme.typography.h6
+            )
         },
         text = {
             Text(
                 text = text,
-                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+                style = MaterialTheme.typography.h4,
+                fontSize = 15.sp,
+                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
             )
         },
         confirmButton = {
@@ -346,7 +348,8 @@ fun SAAlertDialog(
                 Text(
                     text = "OK",
                     color = onPrimaryColor,
-                    fontSize = 15.sp
+                    style = MaterialTheme.typography.h4,
+                    fontSize = 20.sp
                 )
             }
         },
