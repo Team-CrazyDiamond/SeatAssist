@@ -22,13 +22,21 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
-import com.example.seatassist.ui.start.fontsBold
-import com.example.seatassist.ui.start.fontsNormal
+import com.example.seatassist.R
 import kotlin.math.max
 import kotlin.math.roundToInt
+
+val fontsNormal = FontFamily(
+    Font(resId = R.font.timeburnernormal)
+)
+val fontsBold = FontFamily(
+    Font(resId = R.font.timeburnerbold)
+)
 
 /**
 メニュータイトル

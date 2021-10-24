@@ -21,14 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.R
+import com.example.seatassist.ui.components.fontsBold
+import com.example.seatassist.ui.components.fontsNormal
 import com.google.accompanist.systemuicontroller.SystemUiController
 
-val fontsNormal = FontFamily(
-    Font(resId = R.font.timeburnernormal)
-)
-val fontsBold = FontFamily(
-    Font(resId = R.font.timeburnerbold)
-)
+
 
 /**
  * スタート画面
