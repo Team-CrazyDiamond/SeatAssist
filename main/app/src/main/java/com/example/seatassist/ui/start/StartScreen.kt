@@ -130,7 +130,7 @@ fun HowToUse(text: String, onClick: () -> Unit) {
         Text(
             text = text,
             color = MaterialTheme.colors.onPrimary,
-            style = MaterialTheme.typography.h4,
+            fontFamily = fontsNormal,
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp)
         )

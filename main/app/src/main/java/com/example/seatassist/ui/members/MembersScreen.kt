@@ -29,6 +29,8 @@ import com.example.seatassist.ui.components.MainButton
 import com.example.seatassist.ui.components.MainPlaceholder
 import com.example.seatassist.ui.components.MembersCustomLayout
 import com.example.seatassist.ui.components.SubText
+import com.example.seatassist.ui.start.fontsBold
+import com.example.seatassist.ui.start.fontsNormal
 import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalMaterialApi
@@ -111,7 +113,11 @@ fun MembersScreen(
 @Composable
 fun MembersTopBar(id: Int, onAddMemberOne: (Int, String) -> Unit, onNavigationClick: () -> Unit) {
     TopAppBar(
-        title = { Text(text = "Members", fontSize = 20.sp) },
+        title = { Text(
+            text = "Members",
+            fontSize = 20.sp,
+            fontFamily = fontsBold
+        ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
@@ -213,7 +219,7 @@ fun MembersNumber(
         Text(
             text = "Members",
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-            style = MaterialTheme.typography.h6,
+            fontFamily = fontsBold,
             fontSize = 34.sp,
         )
         SubText(
@@ -249,7 +255,7 @@ fun MembersNumberItem(
     ) {
         Text(
             text = "Number of members",
-            style = MaterialTheme.typography.h4,
+            fontFamily = fontsNormal,
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp)
         )
@@ -258,7 +264,7 @@ fun MembersNumberItem(
         ) {
             Text(
                 text = numberText,
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsNormal,
                 color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                 fontSize = 20.sp,
                 modifier = Modifier.padding(16.dp)

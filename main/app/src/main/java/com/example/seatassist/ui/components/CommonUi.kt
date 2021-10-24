@@ -25,6 +25,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
+import com.example.seatassist.ui.start.fontsBold
+import com.example.seatassist.ui.start.fontsNormal
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -42,7 +44,7 @@ fun MainPlaceholder(
         text = text,
         modifier = Modifier.fillMaxWidth(),
         textAlign = textAlign,
-        style = MaterialTheme.typography.h4,
+        fontFamily = fontsNormal,
         fontSize = fontSize,
         color = color.copy(alpha = ContentAlpha.medium)
     )
@@ -81,7 +83,7 @@ fun MainButton(
                 text = text,
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp,
-                style = MaterialTheme.typography.h4
+                fontFamily = fontsNormal
             )
         }
     }
@@ -111,7 +113,7 @@ fun BottomBarButton(
             text = text,
             modifier = Modifier.padding(start = 8.dp),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h4,
+            fontFamily = fontsNormal,
             fontSize = 28.sp,
         )
     }
@@ -139,6 +141,7 @@ fun MainEditText(
                 text = text,
                 style = MaterialTheme.typography.h4,
                 fontSize = 20.sp,
+                fontFamily = fontsNormal,
                 modifier = Modifier.padding(16.dp)
             )
             TextField(
@@ -148,6 +151,7 @@ fun MainEditText(
                 textStyle = MaterialTheme.typography.h4.copy(
                     fontSize = 26.sp,
                     textAlign = TextAlign.End,
+                    fontFamily = fontsNormal,
                 ),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -195,7 +199,8 @@ fun SubText(
         color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         style = MaterialTheme.typography.caption,
         textAlign = textAlign,
-        modifier = modifier
+        modifier = modifier,
+        fontFamily = fontsNormal
     )
 }
 
@@ -246,7 +251,10 @@ fun CommonTopBar(
     contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
 ) {
     TopAppBar(
-        title = { Text(text = title) },
+        title = { Text(
+            text = title,
+            fontFamily = fontsNormal
+        ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
@@ -328,13 +336,13 @@ fun SAAlertDialog(
                 text = title,
                 color = onPrimaryColor,
                 fontSize = 20.sp,
-                style = MaterialTheme.typography.h6
+                fontFamily = fontsBold
             )
         },
         text = {
             Text(
                 text = text,
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsNormal,
                 fontSize = 15.sp,
                 color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
             )
@@ -348,7 +356,7 @@ fun SAAlertDialog(
                 Text(
                     text = "OK",
                     color = onPrimaryColor,
-                    style = MaterialTheme.typography.h4,
+                    fontFamily = fontsNormal,
                     fontSize = 20.sp
                 )
             }
