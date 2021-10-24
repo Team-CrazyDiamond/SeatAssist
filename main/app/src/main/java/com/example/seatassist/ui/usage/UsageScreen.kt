@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,12 +26,26 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalPagerApi
 @Composable
 fun UsageScreen(
-    onNavigationClick: () -> Unit
+    onNavigationClick: () -> Unit,
+    systemUiController: SystemUiController
 ) {
+    val Sidecar = MaterialTheme.colors.primary
+    val darkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Sidecar,
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = Sidecar,
+            darkIcons = darkIcons
+        )
+    }
     Scaffold(
         topBar = { UsageTopBar(onNavigationClick = onNavigationClick) },
         backgroundColor = MaterialTheme.colors.primary,

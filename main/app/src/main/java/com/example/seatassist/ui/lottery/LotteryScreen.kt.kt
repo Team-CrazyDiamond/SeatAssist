@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,6 +22,7 @@ import com.example.seatassist.data.OffsetData
 import com.example.seatassist.ui.components.BottomBarButton
 import com.example.seatassist.ui.components.CommonTopBar
 import com.example.seatassist.ui.components.DragBox
+import com.google.accompanist.systemuicontroller.SystemUiController
 
 @Composable
 fun LotteryScreen(
@@ -29,8 +31,21 @@ fun LotteryScreen(
     onMoveOffsetX: (Int, Float) -> Unit,
     onMoveOffsetY: (Int, Float) -> Unit,
     onShuffleList: () -> Unit,
-    onNavigationClick: () -> Unit
+    onNavigationClick: () -> Unit,
+    systemUiController: SystemUiController
 ) {
+    val pickledBlueWood = MaterialTheme.colors.onPrimary
+    val darkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = pickledBlueWood,
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = pickledBlueWood,
+            darkIcons = darkIcons
+        )
+    }
     Scaffold(
         backgroundColor = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary
