@@ -12,10 +12,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.R
+
+val fontsNormal = FontFamily(
+    Font(resId = R.font.timeburnernormal)
+)
+val fontsBold = FontFamily(
+    Font(resId = R.font.timeburnerbold)
+)
 
 /**
  * スタート画面
@@ -26,7 +36,6 @@ fun StartScreen(
     onUsageClick:() -> Unit,
     onStartClick:() -> Unit
 ) {
-
     Scaffold(
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(MaterialTheme.colors.primary)
@@ -39,9 +48,9 @@ fun StartScreen(
         )
         {
             Text(
-                text = "Seat Assist",
+                text = "SEAT ASSIST",
                 fontSize = 60.sp,
-                fontWeight = FontWeight.Bold
+                fontFamily = fontsBold
             )
             Box(
                 modifier = Modifier
@@ -82,7 +91,7 @@ fun StartButton(text: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsNormal,
                 fontSize = 20.sp,
                 modifier = Modifier
                     .padding(16.dp)
