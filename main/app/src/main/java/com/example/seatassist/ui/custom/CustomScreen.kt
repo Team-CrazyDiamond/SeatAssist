@@ -25,11 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.ScaleData
-import com.example.seatassist.ui.components.MainButton
-import com.example.seatassist.ui.components.MainDivider
-import com.example.seatassist.ui.components.SubText
-import com.example.seatassist.ui.start.fontsBold
-import com.example.seatassist.ui.start.fontsNormal
+import com.example.seatassist.ui.components.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.systemuicontroller.SystemUiController

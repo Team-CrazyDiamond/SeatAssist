@@ -25,12 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.MembersData
-import com.example.seatassist.ui.components.MainButton
-import com.example.seatassist.ui.components.MainPlaceholder
-import com.example.seatassist.ui.components.MembersCustomLayout
-import com.example.seatassist.ui.components.SubText
-import com.example.seatassist.ui.start.fontsBold
-import com.example.seatassist.ui.start.fontsNormal
+import com.example.seatassist.ui.components.*
 import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalMaterialApi

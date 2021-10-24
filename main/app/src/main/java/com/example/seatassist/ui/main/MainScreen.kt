@@ -24,8 +24,6 @@ import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.data.ScaleData
 import com.example.seatassist.ui.components.*
-import com.example.seatassist.ui.start.fontsBold
-import com.example.seatassist.ui.start.fontsNormal
 import com.google.accompanist.systemuicontroller.SystemUiController
 
 /**
