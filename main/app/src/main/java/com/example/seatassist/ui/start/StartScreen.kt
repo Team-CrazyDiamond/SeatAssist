@@ -8,9 +8,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -19,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.R
+import com.google.accompanist.systemuicontroller.SystemUiController
 
 val fontsNormal = FontFamily(
     Font(resId = R.font.timeburnernormal)
@@ -34,8 +37,21 @@ val fontsBold = FontFamily(
 @Composable
 fun StartScreen(
     onUsageClick:() -> Unit,
-    onStartClick:() -> Unit
+    onStartClick:() -> Unit,
+    systemUiController: SystemUiController
 ) {
+    val Sidecar = MaterialTheme.colors.primary
+    val darkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Sidecar,
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = Sidecar,
+            darkIcons = darkIcons
+        )
+    }
     Scaffold(
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(MaterialTheme.colors.primary)

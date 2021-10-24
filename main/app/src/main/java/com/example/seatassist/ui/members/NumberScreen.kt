@@ -5,10 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +19,7 @@ import com.example.seatassist.ui.components.CommonTopBar
 import com.example.seatassist.ui.components.MainButton
 import com.example.seatassist.ui.components.MainPlaceholder
 import com.example.seatassist.ui.components.SubText
+import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalComposeUiApi
 @Composable
@@ -30,8 +28,21 @@ fun NumberScreen(
     onEditNumber: (String) -> Unit,
     onCompletionNumber: (Int) -> Unit,
     onNavigationClick: () -> Unit,
-    onNoChangeMembers: () -> Unit
+    onNoChangeMembers: () -> Unit,
+    systemUiController: SystemUiController
 ) {
+    val Sidecar = MaterialTheme.colors.primary
+    val darkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Sidecar,
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = Sidecar,
+            darkIcons = darkIcons
+        )
+    }
     Scaffold(
         topBar = {
             CommonTopBar(onNavigationClick = {

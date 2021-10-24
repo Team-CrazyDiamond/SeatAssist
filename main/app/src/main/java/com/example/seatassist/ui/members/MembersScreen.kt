@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import com.example.seatassist.ui.components.MainButton
 import com.example.seatassist.ui.components.MainPlaceholder
 import com.example.seatassist.ui.components.MembersCustomLayout
 import com.example.seatassist.ui.components.SubText
+import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
@@ -41,8 +43,22 @@ fun MembersScreen(
     onRemoveMember: (Int) -> Unit,
     onEditName: (Int, String) -> Unit,
     onNavigationClick: () -> Unit,
-    onNumberNavigation: () -> Unit
+    onNumberNavigation: () -> Unit,
+    systemUiController: SystemUiController
 ) {
+    val Sidecar = MaterialTheme.colors.primary
+    val pickledBlueWood = MaterialTheme.colors.onPrimary
+    val darkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Sidecar,
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = pickledBlueWood,
+            darkIcons = darkIcons
+        )
+    }
     BackdropScaffold(
         appBar = {
             MembersTopBar(

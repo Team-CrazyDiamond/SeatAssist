@@ -8,19 +8,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.seatassist.R
 import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.data.ScaleData
 import com.example.seatassist.ui.components.*
+import com.google.accompanist.systemuicontroller.SystemUiController
 
 /**
 
@@ -44,8 +48,22 @@ fun MainScreen(
     onMoveOffsetX: (Int, Float) -> Unit,
     onMoveOffsetY: (Int, Float) -> Unit,
     onShuffleList: () -> Unit,
-    onLotteryClick: () -> Unit
+    onLotteryClick: () -> Unit,
+    systemUiController: SystemUiController
 ) {
+    val Sidecar = MaterialTheme.colors.primary
+    val pickledBlueWood = MaterialTheme.colors.onPrimary
+    val darkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Sidecar,
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = pickledBlueWood,
+            darkIcons = darkIcons
+        )
+    }
     BackdropScaffold(
         appBar = { },
         backLayerContent = {

@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import com.example.seatassist.ui.components.MainDivider
 import com.example.seatassist.ui.components.SubText
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalComposeUiApi
 @ExperimentalPagerApi
@@ -40,8 +42,21 @@ fun CustomScreen(
     onNavigationClick: () -> Unit,
     onEditScale: (Float, Float) -> Unit,
     onEditSize: (Dp) -> Unit,
-    onEditColor: (Color) -> Unit
+    onEditColor: (Color) -> Unit,
+    systemUiController: SystemUiController
 ) {
+    val pickledBlueWood = MaterialTheme.colors.onPrimary
+    val darkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = pickledBlueWood,
+            darkIcons = darkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = pickledBlueWood,
+            darkIcons = darkIcons
+        )
+    }
     Scaffold(
         topBar = { CustomTopBar(onNavigationClick = onNavigationClick) },
         backgroundColor = MaterialTheme.colors.onPrimary,
@@ -51,7 +66,6 @@ fun CustomScreen(
             val state = rememberTransformableState { zoomChange, _, rotationChange ->
                 onEditScale(zoomChange, rotationChange)
             }
-
             Card(
                 shape = RoundedCornerShape(16.dp),
                 backgroundColor = MaterialTheme.colors.primary,
