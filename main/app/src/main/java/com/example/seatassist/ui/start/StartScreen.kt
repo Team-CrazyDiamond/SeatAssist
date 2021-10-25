@@ -86,7 +86,7 @@ fun StartButton(text: String, onClick: () -> Unit) {
     Surface(
         color = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary,
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(40.dp)
     ) {
         Column(
             modifier = Modifier
@@ -96,9 +96,9 @@ fun StartButton(text: String, onClick: () -> Unit) {
             Text(
                 text = text,
                 fontFamily = fontsNormal,
-                fontSize = 20.sp,
+                fontSize = 50.sp,
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(top = 5.dp, bottom = 5.dp, start = 50.dp, end = 50.dp)
             )
         }
     }

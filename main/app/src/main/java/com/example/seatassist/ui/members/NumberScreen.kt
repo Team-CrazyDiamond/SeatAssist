@@ -112,7 +112,6 @@ fun NumberMemberEdit(
                 textAlign = TextAlign.Start
             )
         },
-        textStyle = MaterialTheme.typography.h6.copy(fontSize = 26.sp),
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = MaterialTheme.colors.primaryVariant,
             focusedIndicatorColor = Color.Transparent,
