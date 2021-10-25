@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -112,6 +113,10 @@ fun NumberMemberEdit(
                 textAlign = TextAlign.Start
             )
         },
+        textStyle = TextStyle(
+            fontFamily = fontsNormal,
+            fontSize = 26.sp
+        ),
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = MaterialTheme.colors.primaryVariant,
             focusedIndicatorColor = Color.Transparent,

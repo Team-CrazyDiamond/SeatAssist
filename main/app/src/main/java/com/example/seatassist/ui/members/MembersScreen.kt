@@ -1,5 +1,6 @@
 package com.example.seatassist.ui.members
 
+import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -170,9 +172,10 @@ fun MembersItem(
                             fontSize = 15.sp
                         )
                     },
-                    textStyle = MaterialTheme.typography.h4.copy(
+                    textStyle = TextStyle(
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
+                        fontFamily = fontsNormal
                     ),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(
