@@ -22,6 +22,7 @@ import com.example.seatassist.data.OffsetData
 import com.example.seatassist.ui.components.BottomBarButton
 import com.example.seatassist.ui.components.CommonTopBar
 import com.example.seatassist.ui.components.DragBox
+import com.example.seatassist.ui.components.fontsNormal
 import com.google.accompanist.systemuicontroller.SystemUiController
 
 @Composable
@@ -81,7 +82,7 @@ fun LotteryScreen(
                             Text(
                                 text = membersList[index].name.value,
                                 textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.h4,
+                                fontFamily = fontsNormal,
                                 fontSize = 16.sp
                             )
                         }

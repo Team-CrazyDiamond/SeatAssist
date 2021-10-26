@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.sp
 import com.example.seatassist.R
 import com.example.seatassist.data.UsageData
 import com.example.seatassist.ui.components.SubText
+import com.example.seatassist.ui.components.fontsBold
+import com.example.seatassist.ui.components.fontsNormal
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -163,13 +165,16 @@ fun UsageCard(
                         bottom = 10.dp
                     ),
                 text = cardName,
+                fontFamily = fontsBold,
                 fontSize = 30.sp
             )
             SubText(
                 text = description,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(
-                    bottom = 20.dp
+                    bottom = 20.dp,
+                    start = 20.dp,
+                    end = 20.dp
                 )
             )
             Image(
@@ -198,7 +203,10 @@ fun UsageCard(
 @Composable
 fun UsageTopBar(onNavigationClick: () -> Unit) {
     TopAppBar(
-        title = { Text(text = "How to use Seat Assist") },
+        title = { Text(
+            text = "How to use Seat Assist",
+            fontFamily = fontsNormal
+        ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")

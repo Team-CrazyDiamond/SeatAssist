@@ -25,9 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.ScaleData
-import com.example.seatassist.ui.components.MainButton
-import com.example.seatassist.ui.components.MainDivider
-import com.example.seatassist.ui.components.SubText
+import com.example.seatassist.ui.components.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -91,7 +89,7 @@ fun CustomScreen(
             Text(
                 text = "Custom",
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                style = MaterialTheme.typography.h6,
+                fontFamily = fontsBold,
                 fontSize = 34.sp,
             )
             SubText(
@@ -123,7 +121,10 @@ fun CustomScreen(
 @Composable
 fun CustomTopBar(onNavigationClick: () -> Unit) {
     TopAppBar(
-        title = { Text(text = "Custom") },
+        title = { Text(
+            text = "Custom",
+            fontFamily = fontsBold
+        ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
@@ -147,7 +148,7 @@ fun CustomMenuSize(
         ) {
             Text(
                 text = "Size",
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsNormal,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(16.dp)
             )
@@ -171,7 +172,7 @@ fun CustomMenuSize(
                 }
                 Text(
                     text = sizeValue.value.toInt().toString(),
-                    style = MaterialTheme.typography.h4,
+                    fontFamily = fontsNormal,
                     fontSize = 26.sp,
                     modifier = Modifier.padding(16.dp)
                 )
@@ -210,7 +211,7 @@ fun CustomMenuColor(
         ) {
             Text(
                 text = "Color",
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsNormal,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(16.dp)
             )

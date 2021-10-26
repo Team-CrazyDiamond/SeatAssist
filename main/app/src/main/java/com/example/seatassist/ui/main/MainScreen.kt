@@ -106,7 +106,7 @@ fun MainScreen(
                 Text(
                     text = "Menu",
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                    style = MaterialTheme.typography.h6,
+                    fontFamily = fontsBold,
                     fontSize = 34.sp,
                 )
                 SubText(
@@ -155,7 +155,7 @@ fun MainMenuItem(text: String, onClick: () -> Unit) {
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.h4,
+            fontFamily = fontsNormal,
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp)
         )
