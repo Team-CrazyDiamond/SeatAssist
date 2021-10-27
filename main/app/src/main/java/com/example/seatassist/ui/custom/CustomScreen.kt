@@ -56,7 +56,12 @@ fun CustomScreen(
         )
     }
     Scaffold(
-        topBar = { CustomTopBar(onNavigationClick = onNavigationClick) },
+        topBar = { CommonTopBar(
+            title = "Custom",
+            onNavigationClick = onNavigationClick,
+            backgroundColor = MaterialTheme.colors.onPrimary,
+            contentColor = MaterialTheme.colors.primary
+        ) },
         backgroundColor = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary
     ) {
@@ -72,7 +77,7 @@ fun CustomScreen(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .height(225.dp)
                     .transformable(state)
             ) {
                 Column(
@@ -111,29 +116,15 @@ fun CustomScreen(
                     text = "When the customization is finished, click the Done button.",
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
                 )
-                MainButton(text = "Completion", color = MaterialTheme.colors.primary)
+                MainButton(
+                    text = "Completion",
+                    color = MaterialTheme.colors.primary,
+                    onClick = onNavigationClick
+                )
                 Spacer(modifier = Modifier.size(16.dp))
             }
         }
     }
-}
-
-@Composable
-fun CustomTopBar(onNavigationClick: () -> Unit) {
-    TopAppBar(
-        title = { Text(
-            text = "Custom",
-            fontFamily = fontsBold
-        ) },
-        navigationIcon = {
-            IconButton(onClick = { onNavigationClick() }) {
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
-            }
-        },
-        elevation = 0.dp,
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        contentColor = MaterialTheme.colors.primary
-    )
 }
 
 @Composable

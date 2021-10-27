@@ -98,7 +98,7 @@ fun NumberTopBar(
         TextButton(onClick = { onNavigationClick() }) {
             Text(
                 text = "CLOSE",
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsBold,
                 fontSize = 18.sp,
                 color = contentColor
             )

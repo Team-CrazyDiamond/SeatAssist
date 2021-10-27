@@ -106,8 +106,8 @@ class MainViewModel : ViewModel() {
 
     fun editScale(newScale: Float, newRotation: Float) {
         when {
-            sizeValue.value.value * newScale > 200F -> {
-                sizeValue.value = 200.dp
+            sizeValue.value.value * newScale > 150F -> {
+                sizeValue.value = 150.dp
                 scaleValue.scale.value = 1F
                 scaleValue.rotation.value += newRotation
             }
