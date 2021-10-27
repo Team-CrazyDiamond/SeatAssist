@@ -54,7 +54,7 @@ fun CustomScreen(
         )
         systemUiController.setNavigationBarColor(
             color = pickledBlueWood,
-            darkIcons = darkIcons
+            darkIcons = false
         )
     }
     Scaffold(

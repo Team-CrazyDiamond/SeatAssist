@@ -42,6 +42,7 @@ fun MembersScreen(
     onAddMemberOne: (Int, String) -> Unit,
     onRemoveMember: (Int) -> Unit,
     onEditName: (Int, String) -> Unit,
+    onEditNumber: (String) -> Unit,
     onNavigationClick: () -> Unit,
     onNumberNavigation: () -> Unit,
     systemUiController: SystemUiController
@@ -56,7 +57,7 @@ fun MembersScreen(
         )
         systemUiController.setNavigationBarColor(
             color = pickledBlueWood,
-            darkIcons = darkIcons
+            darkIcons = false
         )
     }
     BackdropScaffold(
@@ -90,7 +91,8 @@ fun MembersScreen(
         },
         frontLayerContent = {
             MembersNumber(
-                numberText = numberText,
+                numberTextNoneVisi = numberTextNoneVisi.toString(),
+                onEditNumber = onEditNumber,
                 onNavigationClick = onNavigationClick,
                 onNumberNavigation = onNumberNavigation
             )
@@ -205,7 +207,8 @@ fun MembersItem(
 @ExperimentalComposeUiApi
 @Composable
 fun MembersNumber(
-    numberText: String,
+    numberTextNoneVisi: String,
+    onEditNumber: (String) -> Unit,
     onNavigationClick: () -> Unit,
     onNumberNavigation: () -> Unit
 ) {
@@ -225,7 +228,10 @@ fun MembersNumber(
                 bottom = 16.dp
             )
         )
-        MembersNumberItem(numberText = numberText, onNumberNavigation = onNumberNavigation)
+        MembersNumberItem(
+            numberTextNoneVisi = numberTextNoneVisi,
+            onEditNumber = onEditNumber,
+            onNumberNavigation = onNumberNavigation)
         MainButton(
             text = "Completion",
             color = MaterialTheme.colors.primary,
@@ -238,14 +244,18 @@ fun MembersNumber(
 
 @Composable
 fun MembersNumberItem(
-    numberText: String,
+    numberTextNoneVisi: String,
+    onEditNumber: (String) -> Unit,
     onNumberNavigation: () -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onNumberNavigation() }
+            .clickable {
+                onEditNumber(numberTextNoneVisi)
+                onNumberNavigation()
+            }
     ) {
         Text(
             text = "Number of members",
@@ -257,7 +267,7 @@ fun MembersNumberItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = numberText,
+                text = numberTextNoneVisi,
                 style = MaterialTheme.typography.h4,
                 color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                 fontSize = 20.sp,

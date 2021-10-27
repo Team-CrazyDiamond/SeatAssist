@@ -61,7 +61,7 @@ fun MainScreen(
         )
         systemUiController.setNavigationBarColor(
             color = pickledBlueWood,
-            darkIcons = darkIcons
+            darkIcons = false
         )
     }
     BackdropScaffold(

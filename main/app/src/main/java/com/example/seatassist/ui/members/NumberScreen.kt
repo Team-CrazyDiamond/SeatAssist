@@ -5,12 +5,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,10 +48,12 @@ fun NumberScreen(
     }
     Scaffold(
         topBar = {
-            CommonTopBar(onNavigationClick = {
-                onNoChangeMembers()
-                onNavigationClick()
-            }, title = "Number of Members")
+            NumberTopBar(
+                onNavigationClick = {
+                    onNoChangeMembers()
+                    onNavigationClick()
+                }
+            )
         },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
@@ -77,6 +82,28 @@ fun NumberScreen(
                 onEditNumber = onEditNumber,
                 onCompletionNumber = onCompletionNumber,
                 onNavigationClick = onNavigationClick
+            )
+        }
+    }
+}
+
+@Composable
+fun NumberTopBar(
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+    onNavigationClick: () -> Unit
+) {
+    TopAppBar(
+        elevation = 0.dp,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor
+    ) {
+        TextButton(onClick = { onNavigationClick() }) {
+            Text(
+                text = "CLOSE",
+                style = MaterialTheme.typography.h4,
+                fontSize = 18.sp,
+                color = contentColor
             )
         }
     }
