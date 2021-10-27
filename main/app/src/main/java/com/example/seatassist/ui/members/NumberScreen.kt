@@ -18,10 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.seatassist.ui.components.CommonTopBar
-import com.example.seatassist.ui.components.MainButton
-import com.example.seatassist.ui.components.MainPlaceholder
-import com.example.seatassist.ui.components.SubText
+import com.example.seatassist.ui.components.*
 import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalComposeUiApi
@@ -62,7 +59,7 @@ fun NumberScreen(
             Text(
                 text = "Please enter the number of members.",
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                style = MaterialTheme.typography.h6,
+                fontFamily = fontsBold,
                 fontSize = 34.sp,
                 textAlign = TextAlign.Center
             )
@@ -73,7 +70,7 @@ fun NumberScreen(
             )
             Text(
                 text = "Number of members",
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsNormal,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             )
@@ -142,7 +139,10 @@ fun NumberMemberEdit(
                 textAlign = TextAlign.Start
             )
         },
-        textStyle = MaterialTheme.typography.h6.copy(fontSize = 26.sp),
+        textStyle = TextStyle(
+            fontFamily = fontsNormal,
+            fontSize = 26.sp
+        ),
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = MaterialTheme.colors.primaryVariant,
             focusedIndicatorColor = Color.Transparent,
@@ -190,13 +190,13 @@ fun SAWarningDialog(
                 text = title,
                 color = onPrimaryColor,
                 fontSize = 20.sp,
-                style = MaterialTheme.typography.h6
+                fontFamily = fontsBold
             )
         },
         text = {
             Text(
                 text = text,
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsNormal,
                 fontSize = 15.sp,
                 color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
             )
@@ -214,7 +214,7 @@ fun SAWarningDialog(
                     Text(
                         text = "Cancel",
                         color = onPrimaryColor,
-                        style = MaterialTheme.typography.h4,
+                        fontFamily = fontsNormal,
                         fontSize = 20.sp
                     )
                 }
@@ -234,7 +234,7 @@ fun SAWarningDialog(
                     Text(
                         text = "OK",
                         color = onPrimaryColor,
-                        style = MaterialTheme.typography.h4,
+                        fontFamily = fontsNormal,
                         fontSize = 20.sp
                     )
                 }

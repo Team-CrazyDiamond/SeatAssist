@@ -16,11 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.R
 import com.example.seatassist.data.UsageData
 import com.example.seatassist.ui.components.SubText
+import com.example.seatassist.ui.components.fontsBold
+import com.example.seatassist.ui.components.fontsNormal
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -53,11 +56,35 @@ fun UsageScreen(
     {
         UsageCardView(
             cardsList = listOf(
-                UsageData("Screen1", "This cord is description of screen1.", R.drawable.usage_1),
-                UsageData("Screen2", "This cord is description of screen2.", R.drawable.usage_1),
-                UsageData("Screen3", "This cord is description of screen3.", R.drawable.usage_1),
-                UsageData("Screen4", "This cord is description of screen4.", R.drawable.usage_1),
-                UsageData("Screen5", "This cord is description of screen5.", R.drawable.usage_1)
+                UsageData(
+                    "Main Screen",
+                    "In this section, you determine the placement of the sheets.\n" +
+                            "Single tap to add a seat, double tap to delete the tapped seat..",
+                    R.drawable.usage_1
+                ),
+                UsageData(
+                    "Members",
+                    "This is where you can register as a member.\n" +
+                            "You can add members one by one by clicking the button on the upper right, or you can set the number of members at once by clicking \"Number of members\".",
+                    R.drawable.usage_1
+                ),
+                UsageData(
+                    "Custom",
+                    "Here, you can change the color and size of the seats to be placed.\n" +
+                            "Once you make a decision here, the changes will be applied until you do the customization again.",
+                    R.drawable.usage_1
+                ),
+                UsageData(
+                    "Lottery",
+                    "Here, the seats after the seat change will be displayed.\n" +
+                            "You can also move your seat from this screen. You can return to the main screen to customize the members and seats.",
+                    R.drawable.usage_1
+                ),
+                UsageData(
+                    "Screen5",
+                    "This cord is description of screen5.",
+                    R.drawable.usage_1
+                )
             )
         )
     }
@@ -138,12 +165,16 @@ fun UsageCard(
                         bottom = 10.dp
                     ),
                 text = cardName,
+                fontFamily = fontsBold,
                 fontSize = 30.sp
             )
             SubText(
                 text = description,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.padding(
-                    bottom = 20.dp
+                    bottom = 20.dp,
+                    start = 20.dp,
+                    end = 20.dp
                 )
             )
             Image(
@@ -172,7 +203,10 @@ fun UsageCard(
 @Composable
 fun UsageTopBar(onNavigationClick: () -> Unit) {
     TopAppBar(
-        title = { Text(text = "How to use Seat Assist") },
+        title = { Text(
+            text = "How to use Seat Assist",
+            fontFamily = fontsNormal
+        ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")

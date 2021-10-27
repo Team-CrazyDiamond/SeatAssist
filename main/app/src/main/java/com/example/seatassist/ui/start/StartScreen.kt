@@ -1,24 +1,22 @@
 package com.example.seatassist.ui.start
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.R
+import com.example.seatassist.ui.components.fontsBold
+import com.example.seatassist.ui.components.fontsNormal
 import com.google.accompanist.systemuicontroller.SystemUiController
+
 
 /**
  * スタート画面
@@ -54,9 +52,9 @@ fun StartScreen(
         )
         {
             Text(
-                text = "Seat Assist",
+                text = "SEAT ASSIST",
                 fontSize = 60.sp,
-                fontWeight = FontWeight.Bold
+                fontFamily = fontsBold
             )
             Box(
                 modifier = Modifier
@@ -88,7 +86,7 @@ fun StartButton(text: String, onClick: () -> Unit) {
     Surface(
         color = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary,
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(40.dp)
     ) {
         Column(
             modifier = Modifier
@@ -97,10 +95,10 @@ fun StartButton(text: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
-                style = MaterialTheme.typography.h4,
-                fontSize = 20.sp,
+                fontFamily = fontsNormal,
+                fontSize = 50.sp,
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(top = 5.dp, bottom = 5.dp, start = 50.dp, end = 50.dp)
             )
         }
     }
@@ -120,7 +118,7 @@ fun HowToUse(text: String, onClick: () -> Unit) {
         Text(
             text = text,
             color = MaterialTheme.colors.onPrimary,
-            style = MaterialTheme.typography.h4,
+            fontFamily = fontsNormal,
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp)
         )
