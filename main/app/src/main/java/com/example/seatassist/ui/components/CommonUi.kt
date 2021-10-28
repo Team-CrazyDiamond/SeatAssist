@@ -261,11 +261,16 @@ fun CommonTopBar(
     TopAppBar(
         title = { Text(
             text = title,
-            fontFamily = fontsNormal
+            fontFamily = fontsBold,
+            color = contentColor
         ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "back button",
+                    tint = contentColor
+                )
             }
         },
         elevation = 0.dp,

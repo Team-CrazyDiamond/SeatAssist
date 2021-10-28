@@ -44,7 +44,7 @@ fun LotteryScreen(
         )
         systemUiController.setNavigationBarColor(
             color = pickledBlueWood,
-            darkIcons = darkIcons
+            darkIcons = false
         )
     }
     Scaffold(

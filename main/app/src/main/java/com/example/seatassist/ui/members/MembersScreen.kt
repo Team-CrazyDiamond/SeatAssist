@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -41,6 +42,7 @@ fun MembersScreen(
     onAddMemberOne: (Int, String) -> Unit,
     onRemoveMember: (Int) -> Unit,
     onEditName: (Int, String) -> Unit,
+    onEditNumber: (String) -> Unit,
     onNavigationClick: () -> Unit,
     onNumberNavigation: () -> Unit,
     systemUiController: SystemUiController
@@ -55,7 +57,7 @@ fun MembersScreen(
         )
         systemUiController.setNavigationBarColor(
             color = pickledBlueWood,
-            darkIcons = darkIcons
+            darkIcons = false
         )
     }
     BackdropScaffold(
@@ -89,13 +91,13 @@ fun MembersScreen(
         },
         frontLayerContent = {
             MembersNumber(
-                numberText = numberText,
+                numberTextNoneVisi = numberTextNoneVisi.toString(),
+                onEditNumber = onEditNumber,
                 onNavigationClick = onNavigationClick,
                 onNumberNavigation = onNumberNavigation
             )
         },
-        scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed),
-        peekHeight = 400.dp,
+        peekHeight = 420.dp,
         headerHeight = 110.dp,
         backLayerBackgroundColor = MaterialTheme.colors.primary,
         backLayerContentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
@@ -112,18 +114,23 @@ fun MembersTopBar(id: Int, onAddMemberOne: (Int, String) -> Unit, onNavigationCl
     TopAppBar(
         title = { Text(
             text = "Members",
+            color = MaterialTheme.colors.onPrimary,
             fontSize = 20.sp,
             fontFamily = fontsBold
         ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "back button",
+                    tint = MaterialTheme.colors.onPrimary
+                )
             }
         },
         actions = {
             IconButton(onClick = { onAddMemberOne(id, "") }) {
                 Icon(
-                    imageVector = Icons.Filled.Add,
+                    imageVector = Icons.Filled.PersonAdd,
                     contentDescription = "member add button",
                     tint = MaterialTheme.colors.onPrimary
                 )
@@ -169,7 +176,7 @@ fun MembersItem(
                         MainPlaceholder(
                             text = "Input text",
                             textAlign = TextAlign.Start,
-                            fontSize = 15.sp
+                            fontSize = 14.sp
                         )
                     },
                     textStyle = TextStyle(
@@ -209,11 +216,14 @@ fun MembersItem(
 @ExperimentalComposeUiApi
 @Composable
 fun MembersNumber(
-    numberText: String,
+    numberTextNoneVisi: String,
+    onEditNumber: (String) -> Unit,
     onNavigationClick: () -> Unit,
     onNumberNavigation: () -> Unit
 ) {
-    Column {
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState())
+    ) {
         Text(
             text = "Members",
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
@@ -229,7 +239,10 @@ fun MembersNumber(
                 bottom = 16.dp
             )
         )
-        MembersNumberItem(numberText = numberText, onNumberNavigation = onNumberNavigation)
+        MembersNumberItem(
+            numberTextNoneVisi = numberTextNoneVisi,
+            onEditNumber = onEditNumber,
+            onNumberNavigation = onNumberNavigation)
         MainButton(
             text = "Completion",
             color = MaterialTheme.colors.primary,
@@ -242,14 +255,18 @@ fun MembersNumber(
 
 @Composable
 fun MembersNumberItem(
-    numberText: String,
+    numberTextNoneVisi: String,
+    onEditNumber: (String) -> Unit,
     onNumberNavigation: () -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onNumberNavigation() }
+            .clickable {
+                onEditNumber(numberTextNoneVisi)
+                onNumberNavigation()
+            }
     ) {
         Text(
             text = "Number of members",
@@ -261,7 +278,7 @@ fun MembersNumberItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = numberText,
+                text = numberTextNoneVisi,
                 fontFamily = fontsNormal,
                 color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                 fontSize = 20.sp,

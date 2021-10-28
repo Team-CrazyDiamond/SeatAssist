@@ -123,6 +123,7 @@ fun SeatAssistNavHost(
                 onAddMemberOne = mainViewModel::addMemberOne,
                 onRemoveMember = mainViewModel::removeMember,
                 onEditName = mainViewModel::editName,
+                onEditNumber = mainViewModel::editNumber,
                 onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) },
                 onNumberNavigation = { navController.navigate(SeatAssistScreen.MembersNumber.name) },
                 systemUiController = systemUiController
@@ -138,7 +139,6 @@ fun SeatAssistNavHost(
                 systemUiController = systemUiController
             )
         }
-
         composable(route = SeatAssistScreen.Custom.name) {
             // Custom Compose
             CustomScreen(

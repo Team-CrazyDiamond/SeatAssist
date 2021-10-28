@@ -61,7 +61,7 @@ fun MainScreen(
         )
         systemUiController.setNavigationBarColor(
             color = pickledBlueWood,
-            darkIcons = darkIcons
+            darkIcons = false
         )
     }
     BackdropScaffold(
@@ -135,8 +135,7 @@ fun MainScreen(
                 )
             }
         },
-        scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed),
-        peekHeight = 170.dp,
+        peekHeight = 172.dp,
         headerHeight = 110.dp,
         backLayerBackgroundColor = MaterialTheme.colors.primary,
         backLayerContentColor = MaterialTheme.colors.primaryVariant,
