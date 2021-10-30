@@ -103,6 +103,7 @@ fun SeatAssistNavHost(
                 offsetList = mainViewModel.offsetList,
                 onAddObject = mainViewModel::addObject,
                 onRemoveObject = mainViewModel::removeObject,
+                onRemoveAllObject = mainViewModel::removeAllObject,
                 onMoveOffsetX = mainViewModel::moveOffsetX,
                 onMoveOffsetY = mainViewModel::moveOffsetY,
                 onMembersClick = { navController.navigate(SeatAssistScreen.Members.name) },

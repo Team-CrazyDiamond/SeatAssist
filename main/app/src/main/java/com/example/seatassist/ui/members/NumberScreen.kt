@@ -214,7 +214,7 @@ fun SAWarningDialog(
                     Text(
                         text = "Cancel",
                         color = onPrimaryColor,
-                        fontFamily = fontsNormal,
+                        fontFamily = fontsBold,
                         fontSize = 20.sp
                     )
                 }
@@ -234,7 +234,7 @@ fun SAWarningDialog(
                     Text(
                         text = "OK",
                         color = onPrimaryColor,
-                        fontFamily = fontsNormal,
+                        fontFamily = fontsBold,
                         fontSize = 20.sp
                     )
                 }

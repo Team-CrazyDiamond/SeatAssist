@@ -7,10 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,6 +42,7 @@ fun MainScreen(
     onEditNumber: (String) -> Unit,
     onAddObject: (Int, String, Float, Float, Color, Dp) -> Unit,
     onRemoveObject: (Int) -> Unit,
+    onRemoveAllObject: () -> Unit,
     onMoveOffsetX: (Int, Float) -> Unit,
     onMoveOffsetY: (Int, Float) -> Unit,
     onShuffleList: () -> Unit,
@@ -130,6 +128,7 @@ fun MainScreen(
                 LotteryRestButton(
                     onShuffleList = onShuffleList,
                     onLotteryClick = onLotteryClick,
+                    onRemoveAllObject = onRemoveAllObject,
                     membersList = membersList.map { it.name.value },
                     offsetList = offsetList
                 )
@@ -166,11 +165,14 @@ fun MainMenuItem(text: String, onClick: () -> Unit) {
 fun LotteryRestButton(
     onShuffleList: () -> Unit,
     onLotteryClick: () -> Unit,
+    onRemoveAllObject: () -> Unit,
     membersList: List<String>,
     offsetList: List<OffsetData>
 ) {
     val openDialogMembers = remember { mutableStateOf(false) }
     val openDialogObject = remember { mutableStateOf(false) }
+    val openDialogEmpty = remember { mutableStateOf(false) }
+    val openDialogReset = remember { mutableStateOf(false) }
     if (openDialogMembers.value) {
         SAAlertDialog(
             title = "All members have not registered yet.",
@@ -185,6 +187,21 @@ fun LotteryRestButton(
             openDialog = openDialogObject
         )
     }
+    if (openDialogEmpty.value) {
+        SAAlertDialog(
+            title = "No seats are assigned",
+            text = "It is necessary to arrange the seats.",
+            openDialog = openDialogEmpty
+        )
+    }
+    if (openDialogReset.value) {
+        SAResetDialog(
+            title = "Warning",
+            text = "Is it okay to delete seats?",
+            openDialog = openDialogReset,
+            onRemoveAllObject = onRemoveAllObject
+        )
+    }
     SubText(
         text = "Once you have entered all the information, please click on the lottery button." +
                 " There is also a reset button.",
@@ -194,9 +211,11 @@ fun LotteryRestButton(
         text = "Lottery",
         color = MaterialTheme.colors.primary,
         onClick = {
-            if (membersList.contains("") || membersList.isEmpty()) {
+            if (offsetList.isNullOrEmpty()) {
+                openDialogEmpty.value = true
+            } else if (membersList.contains("") || membersList.isNullOrEmpty()) {
                 openDialogMembers.value = true
-            } else if (membersList.size != offsetList.size || offsetList.isEmpty()) {
+            } else if (membersList.size != offsetList.size || offsetList.isNullOrEmpty()) {
                 openDialogObject.value = true
             } else {
                 onShuffleList()
@@ -208,7 +227,73 @@ fun LotteryRestButton(
         text = "Reset",
         color = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary,
-        borderColor = MaterialTheme.colors.primary
+        borderColor = MaterialTheme.colors.primary,
+        onClick = { openDialogReset.value = true }
     )
     Spacer(modifier = Modifier.size(16.dp))
+}
+
+@Composable
+fun SAResetDialog(
+    title: String,
+    text: String,
+    primaryColor: Color = MaterialTheme.colors.primary,
+    onPrimaryColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+    openDialog: MutableState<Boolean>,
+    onRemoveAllObject: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = { },
+        backgroundColor = primaryColor,
+        shape = RoundedCornerShape(10.dp),
+        title = {
+            Text(
+                text = title,
+                color = onPrimaryColor,
+                fontSize = 20.sp,
+                fontFamily = fontsBold
+            )
+        },
+        text = {
+            Text(
+                text = text,
+                fontFamily = fontsNormal,
+                fontSize = 15.sp,
+                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+            )
+        },
+        confirmButton = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text(
+                        text = "Cancel",
+                        color = onPrimaryColor,
+                        fontFamily = fontsBold,
+                        fontSize = 20.sp
+                    )
+                }
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                        onRemoveAllObject()
+                    }
+                ) {
+                    Text(
+                        text = "OK",
+                        color = onPrimaryColor,
+                        fontFamily = fontsBold,
+                        fontSize = 20.sp
+                    )
+                }
+            }
+        },
+        dismissButton = null
+    )
 }
