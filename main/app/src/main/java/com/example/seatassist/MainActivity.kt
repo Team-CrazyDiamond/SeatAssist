@@ -1,6 +1,7 @@
 package com.example.seatassist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.seatassist.ui.custom.CustomScreen
 import com.example.seatassist.ui.lottery.LotteryScreen
@@ -87,15 +89,21 @@ fun SeatAssistNavHost(
         }
         composable(route = SeatAssistScreen.Usage.name) {
             // Usage Compose
+            val previousScreen = navController.previousBackStackEntry?.destination?.route
             UsageScreen(
-                onNavigationClick = { navController.navigate(SeatAssistScreen.Start.name) },
+                onNavigationClick = {
+                    if (previousScreen == "Start") {
+                        navController.navigate(SeatAssistScreen.Start.name)
+                    } else {
+                        navController.navigate(SeatAssistScreen.Main.name)
+                    }
+                },
                 systemUiController = systemUiController
             )
         }
         composable(route = SeatAssistScreen.Main.name) {
             // Main Compose
             MainScreen(
-                numberText = mainViewModel.numberText.value,
                 sizeValue = mainViewModel.sizeValue.value,
                 scaleValue = mainViewModel.scaleValue,
                 dragColor = mainViewModel.color.value,
@@ -108,9 +116,10 @@ fun SeatAssistNavHost(
                 onMoveOffsetY = mainViewModel::moveOffsetY,
                 onMembersClick = { navController.navigate(SeatAssistScreen.Members.name) },
                 onSizeClick = { navController.navigate(SeatAssistScreen.Custom.name) },
-                onEditNumber = mainViewModel::editNumber,
                 onShuffleList = mainViewModel::shuffleList,
                 onLotteryClick = { navController.navigate(SeatAssistScreen.Lottery.name) },
+                onNavigateStart = { navController.navigate(SeatAssistScreen.Start.name) },
+                onNavigateUsage = { navController.navigate(SeatAssistScreen.Usage.name) },
                 systemUiController = systemUiController
             )
         }

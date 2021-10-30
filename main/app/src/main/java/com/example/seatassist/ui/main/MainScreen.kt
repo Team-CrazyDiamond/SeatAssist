@@ -7,16 +7,22 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EventSeat
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.seatassist.R
 import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.data.ScaleData
@@ -30,7 +36,6 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(
-    numberText: String,
     sizeValue: Dp,
     scaleValue: ScaleData,
     dragColor: Color,
@@ -39,7 +44,6 @@ fun MainScreen(
     offsetList: List<OffsetData>,
     onMembersClick: () -> Unit,
     onSizeClick: () -> Unit,
-    onEditNumber: (String) -> Unit,
     onAddObject: (Int, String, Float, Float, Color, Dp) -> Unit,
     onRemoveObject: (Int) -> Unit,
     onRemoveAllObject: () -> Unit,
@@ -47,6 +51,8 @@ fun MainScreen(
     onMoveOffsetY: (Int, Float) -> Unit,
     onShuffleList: () -> Unit,
     onLotteryClick: () -> Unit,
+    onNavigateStart: () -> Unit,
+    onNavigateUsage: () -> Unit,
     systemUiController: SystemUiController
 ) {
     val Sidecar = MaterialTheme.colors.primary
@@ -63,7 +69,7 @@ fun MainScreen(
         )
     }
     BackdropScaffold(
-        appBar = { },
+        appBar = { MainTopBar(onNavigateStart = onNavigateStart, onNavigateUsage = onNavigateUsage) },
         backLayerContent = {
             Box(
                 modifier = Modifier
@@ -116,14 +122,21 @@ fun MainScreen(
                         bottom = 16.dp
                     )
                 )
-                MainEditText(
+                MainMenuSeats(
                     text = menu[0],
-                    editText = numberText,
-                    placeholderText = "Input number",
-                    onEditText = onEditNumber
+                    seatTotal = offsetList.size.toString(),
+                    imageVector = Icons.Outlined.EventSeat
                 )
-                MainMenuItem(text = menu[1], onClick = onMembersClick)
-                MainMenuItem(text = menu[2], onClick = onSizeClick)
+                MainMenuItem(
+                    text = menu[1],
+                    onClick = onMembersClick,
+                    imageVector = Icons.Outlined.GroupAdd
+                )
+                MainMenuItem(
+                    text = menu[2],
+                    onClick = onSizeClick,
+                    imageVector = Icons.Outlined.Settings
+                )
                 Spacer(modifier = Modifier.size(16.dp))
                 LotteryRestButton(
                     onShuffleList = onShuffleList,
@@ -147,16 +160,79 @@ fun MainScreen(
 }
 
 @Composable
-fun MainMenuItem(text: String, onClick: () -> Unit) {
+fun MainTopBar(
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+    onNavigateStart: () -> Unit,
+    onNavigateUsage: () -> Unit
+) {
+    TopAppBar(
+        elevation = 0.dp,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onNavigateStart) {
+                Icon(imageVector = Icons.Outlined.Home, contentDescription = "start button")
+            }
+            IconButton(onClick = onNavigateUsage) {
+                Icon(imageVector = Icons.Outlined.Info, contentDescription = "info button")
+            }
+        }
+    }
+}
+
+@Composable
+fun MainMenuSeats(text: String, seatTotal: String, imageVector: ImageVector) {
+    Column {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(imageVector = imageVector, contentDescription = "members icon")
+                Text(
+                    text = text,
+                    fontFamily = fontsNormal,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+            Text(
+                text = seatTotal,
+                fontFamily = fontsNormal,
+                fontSize = 20.sp
+            )
+        }
+        MainDivider()
+    }
+}
+
+@Composable
+fun MainMenuItem(text: String, onClick: () -> Unit, imageVector: ImageVector) {
     Column(
         modifier = Modifier.clickable(onClick = onClick)
     ) {
-        Text(
-            text = text,
-            fontFamily = fontsNormal,
-            fontSize = 20.sp,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(16.dp)
-        )
+        ) {
+            Icon(imageVector = imageVector, contentDescription = "members icon")
+            Text(
+                text = text,
+                fontFamily = fontsNormal,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
         MainDivider()
     }
 }

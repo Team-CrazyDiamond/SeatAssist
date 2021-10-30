@@ -1,6 +1,5 @@
 package com.example.seatassist.ui.members
 
-import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,11 +8,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.PersonAddAlt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
@@ -130,7 +128,7 @@ fun MembersTopBar(id: Int, onAddMemberOne: (Int, String) -> Unit, onNavigationCl
         actions = {
             IconButton(onClick = { onAddMemberOne(id, "") }) {
                 Icon(
-                    imageVector = Icons.Filled.PersonAdd,
+                    imageVector = Icons.Outlined.PersonAddAlt,
                     contentDescription = "member add button",
                     tint = MaterialTheme.colors.onPrimary
                 )
