@@ -48,6 +48,10 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun removeAllObject() {
+        offsetList.clear()
+    }
+
     fun moveOffsetX(id: Int, newOffsetX: Float) {
         offsetList[id].offsetX.value += newOffsetX
     }

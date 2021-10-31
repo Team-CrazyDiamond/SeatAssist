@@ -369,12 +369,11 @@ fun SAAlertDialog(
                 Text(
                     text = "OK",
                     color = onPrimaryColor,
-                    fontFamily = fontsNormal,
+                    fontFamily = fontsBold,
                     fontSize = 20.sp
                 )
             }
         },
         dismissButton = null
     )
-
 }
