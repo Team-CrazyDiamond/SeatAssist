@@ -1,18 +1,15 @@
 package com.example.seatassist
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.seatassist.ui.custom.CustomScreen
 import com.example.seatassist.ui.lottery.LotteryScreen
 import com.example.seatassist.ui.main.MainScreen
@@ -23,6 +20,10 @@ import com.example.seatassist.ui.splash.SplashScreen
 import com.example.seatassist.ui.start.StartScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
 import com.example.seatassist.ui.usage.UsageScreen
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.navigation
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel = MainViewModel()
 
+    @ExperimentalAnimationApi
     @ExperimentalComposeUiApi
     @ExperimentalPagerApi
     @ExperimentalMaterialApi
@@ -42,13 +44,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
 fun SeatAssistApp(mainViewModel: MainViewModel) {
     val systemUiController = rememberSystemUiController()
-    val navController = rememberNavController()
+    val navController = rememberAnimatedNavController()
     SeatAssistTheme {
         SeatAssistNavHost(
             navController = navController,
@@ -59,6 +62,7 @@ fun SeatAssistApp(mainViewModel: MainViewModel) {
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
@@ -69,7 +73,7 @@ fun SeatAssistNavHost(
     mainViewModel: MainViewModel,
     systemUiController: SystemUiController
 ) {
-    NavHost(
+    AnimatedNavHost(
         navController = navController,
         startDestination = SeatAssistScreen.Splash.name,
         modifier = modifier
@@ -101,7 +105,47 @@ fun SeatAssistNavHost(
                 systemUiController = systemUiController
             )
         }
-        composable(route = SeatAssistScreen.Main.name) {
+        composable(
+            route = SeatAssistScreen.Main.name,
+            // このcomposeにnavigateした際に実行するアニメーションを指定
+            enterTransition =  { initial, _ ->
+                when (initial.destination.route) {
+                    "Members", "Custom", "Lottery" -> slideInVertically(
+                        initialOffsetY = { it },
+                        animationSpec = tween(3000)
+                    )
+                    else -> null
+                }
+            },
+            // このcomposeからnavigateする際に実行するアニメーション
+            exitTransition = { _, target ->
+                when (target.destination.route) {
+                    "Members", "Custom", "Lottery" -> slideOutVertically(
+                        targetOffsetY = { it },
+                        animationSpec = tween(3000)
+                    )
+                    else -> null
+                }
+            },
+            popEnterTransition = { initial, _ ->
+                when (initial.destination.route) {
+                    "Members", "Custom", "Lottery" -> slideInVertically(
+                        initialOffsetY = { it },
+                        animationSpec = tween(3000)
+                    )
+                    else -> null
+                }
+            },
+            popExitTransition = { _, target ->
+                when (target.destination.route) {
+                    "Members", "Custom", "Lottery" -> slideOutVertically(
+                        targetOffsetY = { it },
+                        animationSpec = tween(3000)
+                    )
+                    else -> null
+                }
+            }
+        ) {
             // Main Compose
             MainScreen(
                 sizeValue = mainViewModel.sizeValue.value,
@@ -123,7 +167,45 @@ fun SeatAssistNavHost(
                 systemUiController = systemUiController
             )
         }
-        composable(route = SeatAssistScreen.Members.name) {
+        composable(
+            route = SeatAssistScreen.Members.name,
+            enterTransition =  { initial, _ ->
+                when (initial.destination.route) {
+                    "Main" -> slideInVertically(
+                        initialOffsetY = { -it },
+                        animationSpec = tween(3000)
+                    )
+                    else -> null
+                }
+            },
+            exitTransition = { _, target ->
+                when (target.destination.route) {
+                    "Main" -> slideOutVertically(
+                        targetOffsetY = { -it },
+                        animationSpec = tween(3000)
+                    )
+                    else -> null
+                }
+            },
+            popEnterTransition = { initial, _ ->
+                when (initial.destination.route) {
+                    "Main" -> slideInVertically(
+                        initialOffsetY = { -it },
+                        animationSpec = tween(3000)
+                    )
+                    else -> null
+                }
+            },
+            popExitTransition = { _, target ->
+                when (target.destination.route) {
+                    "Main" -> slideOutVertically(
+                        targetOffsetY = { -it },
+                        animationSpec = tween(3000)
+                    )
+                    else -> null
+                }
+            }
+        ) {
             // Members Compose
             MembersScreen(
                 numberText = mainViewModel.numberText.value,
