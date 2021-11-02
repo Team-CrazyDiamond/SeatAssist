@@ -15,10 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.seatassist.R
 import com.example.seatassist.SeatAssistScreen
@@ -30,15 +27,15 @@ fun SplashScreen(
     navController: NavController,
     systemUiController: SystemUiController
 ) {
-    val Sidecar = MaterialTheme.colors.primary
+    val sidecar = MaterialTheme.colors.primary
     val darkIcons = MaterialTheme.colors.isLight
     SideEffect {
         systemUiController.setStatusBarColor(
-            color = Sidecar,
+            color = sidecar,
             darkIcons = darkIcons
         )
         systemUiController.setNavigationBarColor(
-            color = Sidecar,
+            color = sidecar,
             darkIcons = darkIcons
         )
     }
