@@ -1,17 +1,20 @@
 package com.example.seatassist.ui.start
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.*
 import com.example.seatassist.R
 import com.example.seatassist.ui.components.fontsBold
 import com.example.seatassist.ui.components.fontsNormal
@@ -24,8 +27,8 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 @ExperimentalMaterialApi
 @Composable
 fun StartScreen(
-    onUsageClick:() -> Unit,
-    onStartClick:() -> Unit,
+    onUsageClick: () -> Unit,
+    onStartClick: () -> Unit,
     systemUiController: SystemUiController
 ) {
     val Sidecar = MaterialTheme.colors.primary
@@ -66,7 +69,7 @@ fun StartScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    ChairImg()  // 椅子の画像を挿入
+                    LottieLoader()
                 }
             }
             StartButton("Start", onStartClick)    // スタートボタン
@@ -126,15 +129,32 @@ fun HowToUse(text: String, onClick: () -> Unit) {
 }
 
 /**
- * 椅子の画像
+ * 椅子アニメーション
  */
 @Composable
-fun ChairImg() {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Image(
-            painter = painterResource(id = R.drawable.chair_backcolor_yellow_hhd),
-            contentDescription = "chair image",
-            modifier = Modifier.size(500.dp)
+fun LottieLoader() {
+    val compositionResult: LottieCompositionResult = rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(
+            R.raw.startmovie
         )
-    }
+    )
+    val progress by animateLottieCompositionAsState(
+        composition = compositionResult.value,
+        isPlaying = true,
+        iterations = LottieConstants.IterateForever,
+        speed = 1.0f
+    )
+
+    LottieAnimation(
+        compositionResult.value,
+        progress,
+        modifier = Modifier
+            .padding(top = 30.dp, bottom = 50.dp, start = 40.dp, end = 40.dp)
+            .clip(CircleShape)
+            .border(
+                width = 4.dp,
+                color = MaterialTheme.colors.onPrimary,
+                shape = CircleShape
+            )
+    )
 }
