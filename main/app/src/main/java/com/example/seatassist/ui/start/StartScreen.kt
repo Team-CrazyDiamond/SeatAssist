@@ -1,24 +1,24 @@
 package com.example.seatassist.ui.start
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.*
 import com.example.seatassist.R
 import com.example.seatassist.ui.components.fontsBold
 import com.example.seatassist.ui.components.fontsNormal
-import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.systemBarsPadding
 
 
 /**
@@ -28,28 +28,17 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 @Composable
 fun StartScreen(
     onUsageClick: () -> Unit,
-    onStartClick: () -> Unit,
-    systemUiController: SystemUiController
+    onStartClick: () -> Unit
 ) {
-    val Sidecar = MaterialTheme.colors.primary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-    }
     Scaffold(
+        bottomBar = { Spacer(Modifier.navigationBarsHeight().fillMaxWidth()) },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(MaterialTheme.colors.primary)
-    ) {
+    ) { contentPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(contentPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         )

@@ -10,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,26 +18,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.example.seatassist.R
 import com.example.seatassist.SeatAssistScreen
-import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navController: NavController,
-    systemUiController: SystemUiController
+    navController: NavController
 ) {
-    val sidecar = MaterialTheme.colors.primary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = sidecar,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = sidecar,
-            darkIcons = darkIcons
-        )
-    }
     val scale = remember {
         Animatable(0f)  // 最初のサイズ
     }
@@ -56,11 +42,12 @@ fun SplashScreen(
         navController.navigate(SeatAssistScreen.Start.name)
     }
     Surface(
-        color = MaterialTheme.colors.primary
+        color = MaterialTheme.colors.primary,
+        modifier = Modifier.fillMaxSize()
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.systemBarsPadding()
         ) {
             Image(
                 painterResource(id = R.drawable.ic_launcher_sa),

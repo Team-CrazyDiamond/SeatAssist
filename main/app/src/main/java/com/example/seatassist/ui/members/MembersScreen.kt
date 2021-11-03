@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.MembersData
 import com.example.seatassist.ui.components.*
+import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalMaterialApi
@@ -89,7 +90,8 @@ fun MembersScreen(
         frontLayerContentColor = MaterialTheme.colors.primary,
         frontLayerScrimColor = Color.Unspecified,
         frontLayerShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        frontLayerElevation = 8.dp
+        frontLayerElevation = 8.dp,
+        modifier = Modifier.systemBarsPadding()
     )
 }
 

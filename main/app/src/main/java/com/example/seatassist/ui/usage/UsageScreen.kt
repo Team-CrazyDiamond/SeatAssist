@@ -10,7 +10,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,37 +23,28 @@ import com.example.seatassist.data.UsageData
 import com.example.seatassist.ui.components.SubText
 import com.example.seatassist.ui.components.fontsBold
 import com.example.seatassist.ui.components.fontsNormal
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalPagerApi
 @Composable
 fun UsageScreen(
-    onNavigationClick: () -> Unit,
-    systemUiController: SystemUiController
+    onNavigationClick: () -> Unit
 ) {
-    val Sidecar = MaterialTheme.colors.primary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-    }
     Scaffold(
         topBar = { UsageTopBar(onNavigationClick = onNavigationClick) },
+        bottomBar = { Spacer(Modifier.navigationBarsHeight().fillMaxWidth()) },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
     )
-    {
+    { contentPadding ->
         UsageCardView(
+            contentPadding = contentPadding,
             cardsList = listOf(
                 UsageData(
                     "Main Screen",
@@ -96,10 +86,11 @@ fun UsageScreen(
  */
 @ExperimentalPagerApi
 @Composable
-fun UsageCardView(cardsList: List<UsageData>) {
+fun UsageCardView(cardsList: List<UsageData>, contentPadding: PaddingValues) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(contentPadding)
     ) {
         val pagerState = rememberPagerState()
 
@@ -202,7 +193,7 @@ fun UsageCard(
  */
 @Composable
 fun UsageTopBar(onNavigationClick: () -> Unit) {
-    TopAppBar(
+    com.google.accompanist.insets.ui.TopAppBar(
         title = { Text(
             text = "How to use Seat Assist",
             fontFamily = fontsNormal
@@ -214,6 +205,10 @@ fun UsageTopBar(onNavigationClick: () -> Unit) {
         },
         elevation = 0.dp,
         backgroundColor = MaterialTheme.colors.primary,
-        contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
+        contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+        contentPadding = rememberInsetsPaddingValues(
+            LocalWindowInsets.current.statusBars,
+            applyBottom = false,
+        )
     )
 }

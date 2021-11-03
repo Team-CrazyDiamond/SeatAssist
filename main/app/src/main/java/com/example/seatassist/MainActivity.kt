@@ -1,19 +1,19 @@
 package com.example.seatassist
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import com.example.seatassist.ui.custom.CustomScreen
 import com.example.seatassist.ui.lottery.LotteryScreen
@@ -24,16 +24,13 @@ import com.example.seatassist.ui.members.NumberScreen
 import com.example.seatassist.ui.splash.SplashScreen
 import com.example.seatassist.ui.start.StartScreen
 import com.example.seatassist.ui.theme.SeatAssistTheme
-import com.example.seatassist.ui.theme.Sidecar
 import com.example.seatassist.ui.usage.UsageScreen
+import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -45,8 +42,22 @@ class MainActivity : ComponentActivity() {
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            SeatAssistApp(mainViewModel = mainViewModel)
+            ProvideWindowInsets {
+                val systemUiController = rememberSystemUiController()
+                SideEffect {
+                    systemUiController.setSystemBarsColor(
+                        color = Color.Transparent,
+                        darkIcons = true
+                    )
+                    systemUiController.setNavigationBarColor(
+                        color = Color.Transparent,
+                        darkIcons = false
+                    )
+                }
+                SeatAssistApp(mainViewModel = mainViewModel)
+            }
         }
     }
 }
@@ -57,14 +68,12 @@ class MainActivity : ComponentActivity() {
 @ExperimentalMaterialApi
 @Composable
 fun SeatAssistApp(mainViewModel: MainViewModel) {
-    val systemUiController = rememberSystemUiController()
     val navController = rememberAnimatedNavController()
     SeatAssistTheme {
         SeatAssistNavHost(
             navController = navController,
             modifier = Modifier,
-            mainViewModel = mainViewModel,
-            systemUiController = systemUiController
+            mainViewModel = mainViewModel
         )
     }
 }
@@ -78,10 +87,6 @@ fun SeatAssistNavHost(
     navController: NavHostController,
     modifier: Modifier,
     mainViewModel: MainViewModel,
-    systemUiController: SystemUiController,
-    primary: Color = MaterialTheme.colors.primary,
-    onPrimary: Color = MaterialTheme.colors.onPrimary,
-    darkIcons: Boolean = MaterialTheme.colors.isLight,
     durationTime: Int = 500,
     easing: Easing = FastOutSlowInEasing
 ) {
@@ -90,23 +95,76 @@ fun SeatAssistNavHost(
         startDestination = SeatAssistScreen.Splash.name,
         modifier = modifier
     ) {
-        composable(route = SeatAssistScreen.Start.name) {
+        composable(
+            route = SeatAssistScreen.Start.name,
+            enterTransition = { initial, _ ->
+                when (initial.destination.route) {
+                    "Main" -> slideInHorizontally(
+                        initialOffsetX = { -it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    "Usage" -> slideInVertically(
+                        initialOffsetY = { -it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    else -> null
+                }
+            },
+            exitTransition = { _, target ->
+                when (target.destination.route) {
+                    "Main" -> slideOutHorizontally(
+                        targetOffsetX = { -it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    "Usage" -> slideOutVertically(
+                        targetOffsetY = { -it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    else -> null
+                }
+            }
+        ) {
             StartScreen(
                 onUsageClick = { navController.navigate(SeatAssistScreen.Usage.name) },
-                onStartClick = { navController.navigate(SeatAssistScreen.Main.name) },
-                systemUiController = systemUiController
+                onStartClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
         composable(route = SeatAssistScreen.Splash.name) {
             SplashScreen(
-                navController = navController,
-                systemUiController = systemUiController
+                navController = navController
             )
         }
-        composable(route = SeatAssistScreen.Usage.name) {
+        composable(
+            route = SeatAssistScreen.Usage.name,
+            enterTransition = { initial, _ ->
+                when (initial.destination.route) {
+                    "Start" -> slideInVertically(
+                        initialOffsetY = { it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    "Main" -> slideInVertically(
+                        initialOffsetY = { -it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    else -> null
+                }
+            },
+            exitTransition = { _, target ->
+                when (target.destination.route) {
+                    "Start" -> slideOutVertically(
+                        targetOffsetY = { it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    "Main" -> slideOutVertically(
+                        targetOffsetY = { -it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    else -> null
+                }
+            }
+        ) {
             // Usage Compose
             val previousScreen = navController.previousBackStackEntry?.destination?.route
-
             UsageScreen(
                 onNavigationClick = {
                     if (previousScreen == "Start") {
@@ -114,8 +172,7 @@ fun SeatAssistNavHost(
                     } else {
                         navController.navigate(SeatAssistScreen.Main.name)
                     }
-                },
-                systemUiController = systemUiController
+                }
             )
         }
         composable(
@@ -125,6 +182,14 @@ fun SeatAssistNavHost(
                 when (initial.destination.route) {
                     "Members", "Custom", "Lottery" -> slideInVertically(
                         initialOffsetY = { -it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    "Start" -> slideInHorizontally(
+                        initialOffsetX = { it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    "Usage" -> slideInVertically(
+                        initialOffsetY = { it },
                         animationSpec = tween(durationMillis = durationTime, easing = easing)
                     )
                     else -> null
@@ -137,45 +202,18 @@ fun SeatAssistNavHost(
                         targetOffsetY = { -it },
                         animationSpec = tween(durationMillis = durationTime, easing = easing)
                     )
+                    "Start" -> slideOutHorizontally(
+                        targetOffsetX = { it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
+                    "Usage" -> slideOutVertically(
+                        targetOffsetY = { it },
+                        animationSpec = tween(durationMillis = durationTime, easing = easing)
+                    )
                     else -> null
                 }
             }
         ) {
-            val previousScreen = navController.previousBackStackEntry?.destination?.route
-            if (previousScreen == "Start") {
-                LaunchedEffect(key1 = true) {
-                    delay(10L)
-                    systemUiController.setStatusBarColor(
-                        color = primary,
-                        darkIcons = darkIcons
-                    )
-                    systemUiController.setNavigationBarColor(
-                        color = onPrimary,
-                        darkIcons = false
-                    )
-                }
-            } else if (previousScreen == "Members") {
-                LaunchedEffect(key1 = true) {
-                    delay(1)
-                    systemUiController.setNavigationBarColor(
-                        color = onPrimary,
-                        darkIcons = false
-                    )
-                }
-            } else {
-                LaunchedEffect(key1 = true) {
-                    delay(1L)
-                    systemUiController.setNavigationBarColor(
-                        color = onPrimary,
-                        darkIcons = false
-                    )
-                    delay(226L)
-                    systemUiController.setStatusBarColor(
-                        color = primary,
-                        darkIcons = darkIcons
-                    )
-                }
-            }
             // Main Compose
             MainScreen(
                 sizeValue = mainViewModel.sizeValue.value,
@@ -225,32 +263,6 @@ fun SeatAssistNavHost(
                 }
             }
         ) {
-            LaunchedEffect(key1 = true) {
-                delay(1L)
-                systemUiController.setNavigationBarColor(
-                    color = primary,
-                    darkIcons = true
-                )
-                systemUiController.setStatusBarColor(
-                    color = primary,
-                    darkIcons = darkIcons
-                )
-                delay(105L)
-                systemUiController.setStatusBarColor(
-                    color = onPrimary,
-                    darkIcons = darkIcons
-                )
-                delay(35L)
-                systemUiController.setNavigationBarColor(
-                    color = onPrimary,
-                    darkIcons = false
-                )
-                delay(223L)
-                systemUiController.setStatusBarColor(
-                    color = primary,
-                    darkIcons = darkIcons
-                )
-            }
             // Members Compose
             MembersScreen(
                 numberText = mainViewModel.numberText.value,
@@ -291,8 +303,7 @@ fun SeatAssistNavHost(
                 onEditNumber = mainViewModel::editNumber,
                 onCompletionNumber = mainViewModel::completionNumber,
                 onNoChangeMembers = mainViewModel::noChangeMembers,
-                onNavigationClick = { navController.navigate(SeatAssistScreen.Members.name) },
-                systemUiController = systemUiController
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Members.name) }
             )
         }
         composable(
@@ -316,13 +327,6 @@ fun SeatAssistNavHost(
                 }
             }
         ) {
-            LaunchedEffect(key1 = true) {
-                delay(120)
-                systemUiController.setStatusBarColor(
-                    color = onPrimary,
-                    darkIcons = darkIcons
-                )
-            }
             // Custom Compose
             CustomScreen(
                 scaleValue = mainViewModel.scaleValue,
@@ -362,8 +366,7 @@ fun SeatAssistNavHost(
                 onMoveOffsetX = mainViewModel::moveOffsetX,
                 onMoveOffsetY = mainViewModel::moveOffsetY,
                 onShuffleList = mainViewModel::shuffleList,
-                onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) },
-                systemUiController = systemUiController
+                onNavigationClick = { navController.navigate(SeatAssistScreen.Main.name) }
             )
         }
     }

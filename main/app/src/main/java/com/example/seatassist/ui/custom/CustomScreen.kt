@@ -2,6 +2,7 @@ package com.example.seatassist.ui.custom
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,14 +11,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -28,11 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.ScaleData
 import com.example.seatassist.ui.components.*
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.systemuicontroller.SystemUiController
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @ExperimentalPagerApi
@@ -53,10 +49,18 @@ fun CustomScreen(
             backgroundColor = MaterialTheme.colors.onPrimary,
             contentColor = MaterialTheme.colors.primary
         ) },
+        bottomBar = {
+            Spacer(
+                Modifier
+                    .navigationBarsHeight()
+                    .fillMaxWidth())
+        },
         backgroundColor = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary
-    ) {
-        Column {
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier.padding(contentPadding)
+        ) {
             val state = rememberTransformableState { zoomChange, _, rotationChange ->
                 onEditScale(zoomChange, rotationChange)
             }
