@@ -42,22 +42,8 @@ fun MembersScreen(
     onEditName: (Int, String) -> Unit,
     onEditNumber: (String) -> Unit,
     onNavigationClick: () -> Unit,
-    onNumberNavigation: () -> Unit,
-    systemUiController: SystemUiController
+    onNumberNavigation: () -> Unit
 ) {
-    val Sidecar = MaterialTheme.colors.primary
-    val pickledBlueWood = MaterialTheme.colors.onPrimary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = pickledBlueWood,
-            darkIcons = false
-        )
-    }
     BackdropScaffold(
         appBar = {
             MembersTopBar(

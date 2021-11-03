@@ -48,22 +48,8 @@ fun MainScreen(
     onShuffleList: () -> Unit,
     onLotteryClick: () -> Unit,
     onNavigateStart: () -> Unit,
-    onNavigateUsage: () -> Unit,
-    systemUiController: SystemUiController
+    onNavigateUsage: () -> Unit
 ) {
-    val Sidecar = MaterialTheme.colors.primary
-    val pickledBlueWood = MaterialTheme.colors.onPrimary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = pickledBlueWood,
-            darkIcons = false
-        )
-    }
     BackdropScaffold(
         appBar = { MainTopBar(onNavigateStart = onNavigateStart, onNavigateUsage = onNavigateUsage) },
         backLayerContent = {

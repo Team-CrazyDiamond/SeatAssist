@@ -15,7 +15,9 @@ import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -29,6 +31,8 @@ import com.example.seatassist.ui.components.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.systemuicontroller.SystemUiController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @ExperimentalPagerApi
@@ -40,21 +44,8 @@ fun CustomScreen(
     onNavigationClick: () -> Unit,
     onEditScale: (Float, Float) -> Unit,
     onEditSize: (Dp) -> Unit,
-    onEditColor: (Color) -> Unit,
-    systemUiController: SystemUiController
+    onEditColor: (Color) -> Unit
 ) {
-    val pickledBlueWood = MaterialTheme.colors.onPrimary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = pickledBlueWood,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = pickledBlueWood,
-            darkIcons = false
-        )
-    }
     Scaffold(
         topBar = { CommonTopBar(
             title = "Custom",
