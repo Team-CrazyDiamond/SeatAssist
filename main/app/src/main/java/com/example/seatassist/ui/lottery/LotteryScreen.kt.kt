@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material.icons.filled.ModeEditOutline
 import androidx.compose.material.icons.filled.ReplayCircleFilled
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +23,7 @@ import com.example.seatassist.data.OffsetData
 import com.example.seatassist.ui.components.BottomBarButton
 import com.example.seatassist.ui.components.DragBox
 import com.example.seatassist.ui.components.fontsNormal
-import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.insets.navigationBarsHeight
 
 @Composable
 fun LotteryScreen(
@@ -33,28 +32,18 @@ fun LotteryScreen(
     onMoveOffsetX: (Int, Float) -> Unit,
     onMoveOffsetY: (Int, Float) -> Unit,
     onShuffleList: () -> Unit,
-    onNavigationClick: () -> Unit,
-    systemUiController: SystemUiController
+    onNavigationClick: () -> Unit
 ) {
-    val pickledBlueWood = MaterialTheme.colors.onPrimary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = pickledBlueWood,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = pickledBlueWood,
-            darkIcons = false
-        )
-    }
     Scaffold(
         backgroundColor = MaterialTheme.colors.onPrimary,
-        contentColor = MaterialTheme.colors.primary
-    ) {
+        contentColor = MaterialTheme.colors.primary,
+        bottomBar = { Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
+        }
+    ) { contentPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(top = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             Box(

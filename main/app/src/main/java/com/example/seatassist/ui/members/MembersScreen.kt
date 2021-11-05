@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.MembersData
 import com.example.seatassist.ui.components.*
+import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalMaterialApi
@@ -42,22 +43,8 @@ fun MembersScreen(
     onEditName: (Int, String) -> Unit,
     onEditNumber: (String) -> Unit,
     onNavigationClick: () -> Unit,
-    onNumberNavigation: () -> Unit,
-    systemUiController: SystemUiController
+    onNumberNavigation: () -> Unit
 ) {
-    val Sidecar = MaterialTheme.colors.primary
-    val pickledBlueWood = MaterialTheme.colors.onPrimary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = pickledBlueWood,
-            darkIcons = false
-        )
-    }
     BackdropScaffold(
         appBar = {
             MembersTopBar(
@@ -103,7 +90,8 @@ fun MembersScreen(
         frontLayerContentColor = MaterialTheme.colors.primary,
         frontLayerScrimColor = Color.Unspecified,
         frontLayerShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        frontLayerElevation = 8.dp
+        frontLayerElevation = 8.dp,
+        modifier = Modifier.systemBarsPadding()
     )
 }
 

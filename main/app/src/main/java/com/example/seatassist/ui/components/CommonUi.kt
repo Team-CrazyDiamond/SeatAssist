@@ -28,6 +28,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import com.example.seatassist.R
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -256,9 +258,9 @@ fun CommonTopBar(
     onNavigationClick: () -> Unit,
     title: String,
     backgroundColor: Color = MaterialTheme.colors.primary,
-    contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+    contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
 ) {
-    TopAppBar(
+    com.google.accompanist.insets.ui.TopAppBar(
         title = { Text(
             text = title,
             fontFamily = fontsBold,
@@ -275,7 +277,11 @@ fun CommonTopBar(
         },
         elevation = 0.dp,
         backgroundColor = backgroundColor,
-        contentColor = contentColor
+        contentColor = contentColor,
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.statusBars,
+            applyBottom = false
+        )
     )
 }
 
