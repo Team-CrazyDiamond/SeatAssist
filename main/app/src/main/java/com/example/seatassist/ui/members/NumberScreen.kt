@@ -5,9 +5,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +20,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seatassist.ui.components.*
-import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.statusBarsPadding
 
 @ExperimentalComposeUiApi
 @Composable
@@ -28,21 +32,8 @@ fun NumberScreen(
     onEditNumber: (String) -> Unit,
     onCompletionNumber: (Int) -> Unit,
     onNavigationClick: () -> Unit,
-    onNoChangeMembers: () -> Unit,
-    systemUiController: SystemUiController
+    onNoChangeMembers: () -> Unit
 ) {
-    val Sidecar = MaterialTheme.colors.primary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-    }
     Scaffold(
         topBar = {
             NumberTopBar(
@@ -52,10 +43,15 @@ fun NumberScreen(
                 }
             )
         },
+        bottomBar = {
+            Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
+        },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
-    ) {
-        Column {
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier.padding(contentPadding)
+        ) {
             Text(
                 text = "Please enter the number of members.",
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
@@ -93,7 +89,11 @@ fun NumberTopBar(
     TopAppBar(
         elevation = 0.dp,
         backgroundColor = backgroundColor,
-        contentColor = contentColor
+        contentColor = contentColor,
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.statusBars,
+            applyBottom = false
+        )
     ) {
         TextButton(onClick = { onNavigationClick() }) {
             Text(

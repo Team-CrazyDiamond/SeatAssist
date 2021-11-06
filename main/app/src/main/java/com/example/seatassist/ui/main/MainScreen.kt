@@ -1,5 +1,6 @@
 package com.example.seatassist.ui.main
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -8,18 +9,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EventSeat
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +27,7 @@ import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.data.ScaleData
 import com.example.seatassist.ui.components.*
-import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.insets.*
 
 /**
 
@@ -52,22 +52,8 @@ fun MainScreen(
     onShuffleList: () -> Unit,
     onLotteryClick: () -> Unit,
     onNavigateStart: () -> Unit,
-    onNavigateUsage: () -> Unit,
-    systemUiController: SystemUiController
+    onNavigateUsage: () -> Unit
 ) {
-    val Sidecar = MaterialTheme.colors.primary
-    val pickledBlueWood = MaterialTheme.colors.onPrimary
-    val darkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Sidecar,
-            darkIcons = darkIcons
-        )
-        systemUiController.setNavigationBarColor(
-            color = pickledBlueWood,
-            darkIcons = false
-        )
-    }
     BackdropScaffold(
         appBar = { MainTopBar(onNavigateStart = onNavigateStart, onNavigateUsage = onNavigateUsage) },
         backLayerContent = {
@@ -104,6 +90,7 @@ fun MainScreen(
             }
         },
         frontLayerContent = {
+            Log.i("testing", "${LocalWindowInsets.current.navigationBars.top.dp}")
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
@@ -155,7 +142,8 @@ fun MainScreen(
         frontLayerContentColor = MaterialTheme.colors.primary,
         frontLayerScrimColor = Color.Unspecified,
         frontLayerShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        frontLayerElevation = 8.dp
+        frontLayerElevation = 8.dp,
+        modifier = Modifier.systemBarsPadding()
     )
 }
 
