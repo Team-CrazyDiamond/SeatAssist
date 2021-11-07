@@ -14,7 +14,9 @@ import com.example.seatassist.data.ScaleData
 class MainViewModel(
     private val screenWidth: Float,
     private val screenHeight: Float,
-    private val context: Context) : ViewModel() {
+    private val context: Context,
+    private val density: Float = context.resources.displayMetrics.density
+) : ViewModel() {
 
     var numberText = mutableStateOf("0")
     var numberTextNoneVisi = mutableStateOf(0)
@@ -30,12 +32,13 @@ class MainViewModel(
     var color = mutableStateOf(Color(0xFFDBD2AC))
 
     fun addObject(id: Int, name: String, OffsetX: Float, OffsetY: Float, color: Color, size: Dp) {
+        val pxSize = size.value * density
         offsetList.add(
             OffsetData(
                 id,
                 name,
-                mutableStateOf(OffsetX),
-                mutableStateOf(OffsetY),
+                mutableStateOf(OffsetX - (pxSize * 0.5).toFloat()),
+                mutableStateOf(OffsetY - (pxSize * 0.5).toFloat()),
                 color,
                 size,
             )
@@ -56,7 +59,6 @@ class MainViewModel(
     }
 
     fun moveOffsetX(id: Int, newOffsetX: Float) {
-        val density = context.resources.displayMetrics.density
         val x = (offsetList[id].offsetX.value) / density
         val size = offsetList[id].size
         if ((x > 0 && x < screenWidth - size.value) || (x <= 0 && newOffsetX >= 0) || (x >= screenWidth - size.value && newOffsetX <= 0)) {
@@ -65,7 +67,6 @@ class MainViewModel(
     }
 
     fun moveOffsetY(id: Int, newOffsetY: Float) {
-        val density = context.resources.displayMetrics.density
         val y = (offsetList[id].offsetY.value) / density
         val size = offsetList[id].size
         if ((y > 0 && y < screenHeight - size.value) || (y < 0 && newOffsetY >= 0) || (y >= screenWidth - size.value && newOffsetY <= 0)) {

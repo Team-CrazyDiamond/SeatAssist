@@ -195,8 +195,7 @@ fun UsageCard(
 fun UsageTopBar(onNavigationClick: () -> Unit) {
     com.google.accompanist.insets.ui.TopAppBar(
         title = { Text(
-            text = "How to use Seat Assist",
-            fontFamily = fontsNormal
+            text = "How to use Seat Assist"
         ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
