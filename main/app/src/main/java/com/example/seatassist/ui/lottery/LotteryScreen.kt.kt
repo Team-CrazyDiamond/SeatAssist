@@ -15,18 +15,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.seatassist.MainActivity
 import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.ui.components.BottomBarButton
 import com.example.seatassist.ui.components.DragBox
+import com.example.seatassist.ui.components.fontsBold
 import com.example.seatassist.ui.components.fontsNormal
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 
 @Composable
 fun LotteryScreen(
+    screenHeight: Float,
     membersList: List<MembersData>,
     offsetList: List<OffsetData>,
     onMoveOffsetX: (Int, Float) -> Unit,
@@ -35,25 +42,25 @@ fun LotteryScreen(
     onNavigationClick: () -> Unit
 ) {
     Scaffold(
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        contentColor = MaterialTheme.colors.primary,
-        bottomBar = { Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
+        topBar = { LotteryAppBar(title = "Lottery Result",) },
+        backgroundColor = MaterialTheme.colors.primary,
+        contentColor = MaterialTheme.colors.onPrimary,
+        bottomBar = { Spacer(
+            Modifier
+                .navigationBarsHeight()
+                .fillMaxWidth())
         }
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(top = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             Box(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                     .fillMaxWidth()
-                    .height(575.dp)
-                    .clip(shape = RoundedCornerShape(16.dp))
-                    .background(color = MaterialTheme.colors.primary)
-
+                    .height(screenHeight.dp)
             ) {
                 offsetList.forEachIndexed { index, offsetData ->
                     DragBox(
@@ -105,6 +112,35 @@ fun LotteryScreen(
                     modifier = Modifier.clickable { onShuffleList() }
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun LotteryAppBar(
+    title: String,
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
+) {
+    TopAppBar(
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.statusBars,
+            applyBottom = false
+        ),
+        elevation = 0.dp
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = title,
+                fontFamily = fontsBold,
+                color = contentColor
+            )
         }
     }
 }

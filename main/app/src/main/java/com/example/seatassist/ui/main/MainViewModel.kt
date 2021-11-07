@@ -1,5 +1,6 @@
 package com.example.seatassist.ui.main
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -10,7 +11,10 @@ import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.data.ScaleData
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val screenWidth: Float,
+    private val screenHeight: Float,
+    private val context: Context) : ViewModel() {
 
     var numberText = mutableStateOf("0")
     var numberTextNoneVisi = mutableStateOf(0)
@@ -18,7 +22,6 @@ class MainViewModel : ViewModel() {
     fun editNumber(newNumber: String) {
         numberText.value = newNumber
     }
-
 
     var offsetList = mutableStateListOf<OffsetData>()
 
@@ -53,11 +56,21 @@ class MainViewModel : ViewModel() {
     }
 
     fun moveOffsetX(id: Int, newOffsetX: Float) {
-        offsetList[id].offsetX.value += newOffsetX
+        val density = context.resources.displayMetrics.density
+        val x = (offsetList[id].offsetX.value) / density
+        val size = offsetList[id].size
+        if ((x > 0 && x < screenWidth - size.value) || (x <= 0 && newOffsetX >= 0) || (x >= screenWidth - size.value && newOffsetX <= 0)) {
+            offsetList[id].offsetX.value += newOffsetX
+        }
     }
 
     fun moveOffsetY(id: Int, newOffsetY: Float) {
-        offsetList[id].offsetY.value += newOffsetY
+        val density = context.resources.displayMetrics.density
+        val y = (offsetList[id].offsetY.value) / density
+        val size = offsetList[id].size
+        if ((y > 0 && y < screenHeight - size.value) || (y < 0 && newOffsetY >= 0) || (y >= screenWidth - size.value && newOffsetY <= 0)) {
+            offsetList[id].offsetY.value += newOffsetY
+        }
     }
 
 
