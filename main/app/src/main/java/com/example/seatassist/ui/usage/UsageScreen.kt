@@ -50,30 +50,30 @@ fun UsageScreen(
                     "Main Screen",
                     "In this section, you determine the placement of the sheets.\n" +
                             "Single tap to add a seat, double tap to delete the tapped seat..",
-                    R.drawable.usage_1
+                    R.drawable.main_screen
                 ),
                 UsageData(
                     "Members",
                     "This is where you can register as a member.\n" +
                             "You can add members one by one by clicking the button on the upper right, or you can set the number of members at once by clicking \"Number of members\".",
-                    R.drawable.usage_1
+                    R.drawable.member_screen
+                ),
+                UsageData(
+                    "Member's Number",
+                    "On this screen, the number of members can be determined in bulk. Note, however, that the information you have entered will be initialized.",
+                    R.drawable.number_screen
                 ),
                 UsageData(
                     "Custom",
                     "Here, you can change the color and size of the seats to be placed.\n" +
                             "Once you make a decision here, the changes will be applied until you do the customization again.",
-                    R.drawable.usage_1
+                    R.drawable.custom_screen
                 ),
                 UsageData(
                     "Lottery",
                     "Here, the seats after the seat change will be displayed.\n" +
                             "You can also move your seat from this screen. You can return to the main screen to customize the members and seats.",
-                    R.drawable.usage_1
-                ),
-                UsageData(
-                    "Screen5",
-                    "This cord is description of screen5.",
-                    R.drawable.usage_1
+                    R.drawable.lottery_screen
                 )
             )
         )
@@ -143,8 +143,8 @@ fun UsageCard(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,
-        elevation = 3.dp
-    ) {
+        elevation = 5.dp,
+            ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -196,7 +196,7 @@ fun UsageTopBar(onNavigationClick: () -> Unit) {
     com.google.accompanist.insets.ui.TopAppBar(
         title = { Text(
             text = "How to use Seat Assist",
-            fontFamily = fontsNormal
+            fontFamily = fontsBold
         ) },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
