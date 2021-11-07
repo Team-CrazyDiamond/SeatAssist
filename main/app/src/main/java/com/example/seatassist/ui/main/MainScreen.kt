@@ -59,7 +59,7 @@ fun MainScreen(
         backLayerContent = {
             Box(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                     .fillMaxSize()
                     .pointerInput(Unit) {
                         detectTapGestures {

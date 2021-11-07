@@ -13,12 +13,15 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.example.seatassist.ui.custom.CustomScreen
 import com.example.seatassist.ui.lottery.LotteryScreen
 import com.example.seatassist.ui.main.MainScreen
 import com.example.seatassist.ui.main.MainViewModel
+import com.example.seatassist.ui.main.MainViewModelFactory
 import com.example.seatassist.ui.members.MembersScreen
 import com.example.seatassist.ui.members.NumberScreen
 import com.example.seatassist.ui.splash.SplashScreen
@@ -31,10 +34,15 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlin.properties.Delegates
 
 class MainActivity : ComponentActivity() {
 
-    private val mainViewModel = MainViewModel()
+    private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainViewModelFactory: MainViewModelFactory
+    private var screenWidth by Delegates.notNull<Float>()
+    private var screenHeight by Delegates.notNull<Float>()
+
 
     @ExperimentalAnimationApi
     @ExperimentalComposeUiApi
@@ -42,6 +50,25 @@ class MainActivity : ComponentActivity() {
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 画面サイズを取得
+        val density = resources.displayMetrics.density
+        @Suppress("DEPRECATION")
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            val bounds = windowManager.currentWindowMetrics.bounds
+            screenWidth = bounds.width() / density - 32 // 両端のpaddingを考慮する(16 x 2)
+            screenHeight = bounds.height() / density - 250
+
+        } else {
+            val defaultDisplay = windowManager.defaultDisplay
+            screenWidth = defaultDisplay.width / density - 32
+            screenHeight = defaultDisplay.height / density
+        }
+
+        // viewModelのインスタンスを作成
+        mainViewModelFactory = MainViewModelFactory(screenWidth = screenWidth, screenHeight = screenHeight, context = this)
+        mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ProvideWindowInsets {
@@ -56,7 +83,7 @@ class MainActivity : ComponentActivity() {
                         darkIcons = false
                     )
                 }
-                SeatAssistApp(mainViewModel = mainViewModel)
+                SeatAssistApp(mainViewModel = mainViewModel, screenHeight = screenHeight)
             }
         }
     }
@@ -67,13 +94,14 @@ class MainActivity : ComponentActivity() {
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
-fun SeatAssistApp(mainViewModel: MainViewModel) {
+fun SeatAssistApp(mainViewModel: MainViewModel, screenHeight: Float) {
     val navController = rememberAnimatedNavController()
     SeatAssistTheme {
         SeatAssistNavHost(
             navController = navController,
             modifier = Modifier,
-            mainViewModel = mainViewModel
+            mainViewModel = mainViewModel,
+            screenHeight = screenHeight
         )
     }
 }
@@ -88,7 +116,8 @@ fun SeatAssistNavHost(
     modifier: Modifier,
     mainViewModel: MainViewModel,
     durationTime: Int = 500,
-    easing: Easing = FastOutSlowInEasing
+    easing: Easing = FastOutSlowInEasing,
+    screenHeight: Float
 ) {
     AnimatedNavHost(
         navController = navController,
@@ -361,6 +390,7 @@ fun SeatAssistNavHost(
         ) {
             // Lottery Compose
             LotteryScreen(
+                screenHeight = screenHeight,
                 membersList = mainViewModel.membersList,
                 offsetList = mainViewModel.offsetList,
                 onMoveOffsetX = mainViewModel::moveOffsetX,
