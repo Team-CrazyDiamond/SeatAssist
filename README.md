@@ -72,3 +72,12 @@
 - [ ] テキストフィールドに空欄があった場合，例外のダイアログをはくかどうか
 - [ ] ナビゲーションのバックボタンで操作しても，メンバー数と，テキストフィールドの数が合うかどうか
 - [ ] 席オブジェクトが指定したフィールドの範囲外に操作可能になっていないか．
+
+> ## 開発者情報・問い合わせ
+
+- Tomoch0104
+  - https://github.com/Tomoch0104
+- Rakalute
+  - https://github.com/Rakalute
+- お問合せ先
+  - cracydiamonddeveloper@gmail.com
