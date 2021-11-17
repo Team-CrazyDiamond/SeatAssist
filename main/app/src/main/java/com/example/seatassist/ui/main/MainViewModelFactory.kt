@@ -8,7 +8,7 @@ class MainViewModelFactory(
     private val screenWidth: Float,
     private val screenHeight: Float,
     private val context: Context
-): ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             return MainViewModel(

@@ -37,13 +37,15 @@ fun LotteryScreen(
     onNavigationClick: () -> Unit
 ) {
     Scaffold(
-        topBar = { LotteryAppBar(title = "Lottery Result",) },
+        topBar = { LotteryAppBar(title = "Lottery Result") },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,
-        bottomBar = { Spacer(
-            Modifier
-                .navigationBarsHeight()
-                .fillMaxWidth())
+        bottomBar = {
+            Spacer(
+                Modifier
+                    .navigationBarsHeight()
+                    .fillMaxWidth()
+            )
         }
     ) { contentPadding ->
         Column(

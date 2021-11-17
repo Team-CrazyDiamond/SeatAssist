@@ -22,7 +22,6 @@ import com.example.seatassist.R
 import com.example.seatassist.data.UsageData
 import com.example.seatassist.ui.components.SubText
 import com.example.seatassist.ui.components.fontsBold
-import com.example.seatassist.ui.components.fontsNormal
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -38,7 +37,10 @@ fun UsageScreen(
 ) {
     Scaffold(
         topBar = { UsageTopBar(onNavigationClick = onNavigationClick) },
-        bottomBar = { Spacer(Modifier.navigationBarsHeight().fillMaxWidth()) },
+        bottomBar = { Spacer(
+            Modifier
+                .navigationBarsHeight()
+                .fillMaxWidth()) },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
     )
@@ -144,7 +146,7 @@ fun UsageCard(
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,
         elevation = 5.dp,
-            ) {
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -194,10 +196,12 @@ fun UsageCard(
 @Composable
 fun UsageTopBar(onNavigationClick: () -> Unit) {
     com.google.accompanist.insets.ui.TopAppBar(
-        title = { Text(
-            text = "How to use Seat Assist",
-            fontFamily = fontsBold
-        ) },
+        title = {
+            Text(
+                text = "How to use Seat Assist",
+                fontFamily = fontsBold
+            )
+        },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back button")

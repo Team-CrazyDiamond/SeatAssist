@@ -27,7 +27,8 @@ import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
 import com.example.seatassist.data.ScaleData
 import com.example.seatassist.ui.components.*
-import com.google.accompanist.insets.*
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.systemBarsPadding
 
 /**
 
@@ -55,7 +56,12 @@ fun MainScreen(
     onNavigateUsage: () -> Unit
 ) {
     BackdropScaffold(
-        appBar = { MainTopBar(onNavigateStart = onNavigateStart, onNavigateUsage = onNavigateUsage) },
+        appBar = {
+            MainTopBar(
+                onNavigateStart = onNavigateStart,
+                onNavigateUsage = onNavigateUsage
+            )
+        },
         backLayerContent = {
             Box(
                 modifier = Modifier

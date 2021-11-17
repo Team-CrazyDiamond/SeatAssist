@@ -19,7 +19,6 @@ import com.example.seatassist.R
 import com.example.seatassist.ui.components.fontsBold
 import com.example.seatassist.ui.components.fontsNormal
 import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.systemBarsPadding
 
 
 /**
@@ -32,7 +31,10 @@ fun StartScreen(
     onStartClick: () -> Unit
 ) {
     Scaffold(
-        bottomBar = { Spacer(Modifier.navigationBarsHeight().fillMaxWidth()) },
+        bottomBar = { Spacer(
+            Modifier
+                .navigationBarsHeight()
+                .fillMaxWidth()) },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(MaterialTheme.colors.primary)
     ) { contentPadding ->

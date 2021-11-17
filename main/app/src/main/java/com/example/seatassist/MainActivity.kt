@@ -13,7 +13,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
@@ -66,7 +65,11 @@ class MainActivity : ComponentActivity() {
         }
 
         // viewModelのインスタンスを作成
-        mainViewModelFactory = MainViewModelFactory(screenWidth = screenWidth, screenHeight = screenHeight, context = this)
+        mainViewModelFactory = MainViewModelFactory(
+            screenWidth = screenWidth,
+            screenHeight = screenHeight,
+            context = this
+        )
         mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -207,7 +210,7 @@ fun SeatAssistNavHost(
         composable(
             route = SeatAssistScreen.Main.name,
             // このcomposeにnavigateした際に実行するアニメーションを指定
-            enterTransition =  { initial, _ ->
+            enterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Members", "Custom", "Lottery" -> slideInVertically(
                         initialOffsetY = { -it },
@@ -265,7 +268,7 @@ fun SeatAssistNavHost(
         }
         composable(
             route = SeatAssistScreen.Members.name,
-            enterTransition =  { initial, _ ->
+            enterTransition = { initial, _ ->
                 when (initial.destination.route) {
                     "Main" -> slideInVertically(
                         initialOffsetY = { it },

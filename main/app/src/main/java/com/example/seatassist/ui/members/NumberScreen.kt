@@ -23,7 +23,6 @@ import com.example.seatassist.ui.components.*
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.accompanist.insets.statusBarsPadding
 
 @ExperimentalComposeUiApi
 @Composable
@@ -44,7 +43,10 @@ fun NumberScreen(
             )
         },
         bottomBar = {
-            Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
+            Spacer(
+                Modifier
+                    .navigationBarsHeight()
+                    .fillMaxWidth())
         },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
