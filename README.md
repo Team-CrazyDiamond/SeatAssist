@@ -1,6 +1,6 @@
 # SeatAssist
 
-<img src="ReadmeImg/icon.png" width=50>
+<img src="ReadmeImg/icon.png" width=200>
 
 <h3>
   私たち「CrazyDiamond」は，飲み会やグループ学習の際に活躍する席替えアプリ「SeatAssist」を開発しています．
