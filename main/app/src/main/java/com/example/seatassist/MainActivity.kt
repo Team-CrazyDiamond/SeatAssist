@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
         } else {
             val defaultDisplay = windowManager.defaultDisplay
             screenWidth = defaultDisplay.width / density - 32
-            screenHeight = defaultDisplay.height / density
+            screenHeight = defaultDisplay.height / density - 250
         }
 
         // viewModelのインスタンスを作成

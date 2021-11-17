@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.*
@@ -38,7 +39,8 @@ fun StartScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding),
+                .padding(contentPadding)
+                .padding(top = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         )
@@ -48,15 +50,11 @@ fun StartScreen(
                 fontSize = 60.sp,
                 fontFamily = fontsBold
             )
-            Box(
-                modifier = Modifier
-                    .size(400.dp)
-            ) {
-                Column(
+            BoxWithConstraints {
+                val boxWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
+                Box(
                     modifier = Modifier
-                        .fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                        .size(boxWidth)
                 ) {
                     LottieLoader()
                 }
