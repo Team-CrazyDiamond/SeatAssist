@@ -1,217 +1,369 @@
 package com.example.seatassist.ui.main
 
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.seatassist.SeatAssistScreen
+import com.example.seatassist.data.MembersData
 import com.example.seatassist.data.OffsetData
-import com.example.seatassist.ui.components.MainPlaceholder
-import kotlin.math.roundToInt
+import com.example.seatassist.data.ScaleData
+import com.example.seatassist.ui.components.*
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.systemBarsPadding
 
+/**
+
+ **/
+@ExperimentalComposeUiApi
+@ExperimentalMaterialApi
 @Composable
 fun MainScreen(
-    numberText: String,
-    menu: List<String> = listOf("Number of seats", "Members", "Seats size"),
+    sizeValue: Dp,
+    scaleValue: ScaleData,
+    dragColor: Color,
+    menu: List<String> = listOf("Number of seats", "Members", "Custom"),
+    membersList: List<MembersData>,
     offsetList: List<OffsetData>,
     onMembersClick: () -> Unit,
     onSizeClick: () -> Unit,
-    onEditNumber: (String) -> Unit,
-    onAddObject: (Int, Float, Float) -> Unit,
+    onAddObject: (Int, String, Float, Float, Color, Dp) -> Unit,
+    onRemoveObject: (Int) -> Unit,
+    onRemoveAllObject: () -> Unit,
     onMoveOffsetX: (Int, Float) -> Unit,
-    onMoveOffsetY: (Int, Float) -> Unit
+    onMoveOffsetY: (Int, Float) -> Unit,
+    onShuffleList: () -> Unit,
+    onLotteryClick: () -> Unit,
+    onNavigateStart: () -> Unit,
+    onNavigateUsage: () -> Unit
 ) {
-    BoxWithConstraints {
-        val screenWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
-        val screenHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }
-
-        Column(
-            modifier = Modifier.wrapContentHeight()
-        ) {
-            val state = rememberScrollState()
-            val stateValue = if (state.value <= screenHeight.value * 0.3) state.value else (screenHeight.value * 0.3).toInt()
-
-            Surface(
-                contentColor = MaterialTheme.colors.primary
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(screenWidth)
-                        .height((screenHeight.value * 0.85F - stateValue).dp)
-                        .clickable { onAddObject(offsetList.size, 0f, 0f) }
-                ) {
-                    // 操作画面をここに記述
-                    offsetList.forEach { offsetData ->
-                        DragBox(id = offsetData.id,
-                            offsetX = offsetData.offsetX.value,
-                            offsetY = offsetData.offsetY.value,
-                            onMoveOffsetX = onMoveOffsetX,
-                            onMoveOffsetY = onMoveOffsetY)
+    BackdropScaffold(
+        appBar = {
+            MainTopBar(
+                onNavigateStart = onNavigateStart,
+                onNavigateUsage = onNavigateUsage
+            )
+        },
+        backLayerContent = {
+            Box(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp)
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            onAddObject(
+                                offsetList.size,
+                                "",
+                                it.x,
+                                it.y,
+                                dragColor,
+                                sizeValue * scaleValue.scale.value
+                            )
+                        }
                     }
+            ) {
+                offsetList.forEach { offsetData ->
+                    DragBox(
+                        id = offsetData.id,
+                        color = offsetData.color,
+                        offsetX = offsetData.offsetX.value,
+                        offsetY = offsetData.offsetY.value,
+                        sizeValue = offsetData.size,
+                        onMoveOffsetX = onMoveOffsetX,
+                        onMoveOffsetY = onMoveOffsetY,
+                        onRemoveObject = onRemoveObject,
+                        dragBoxContent = { }
+                    )
                 }
             }
-
-//            Box(
-//                modifier = Modifier
-//                    .width(screenWidth)
-//                    .height((screenHeight.value * 0.85F - stateValue).dp)
-//                    .clickable { onAddObject(offsetList.size, 0f, 0f) }
-//            ) {
-//                // 操作画面をここに記述
-//                offsetList.forEach { offsetData ->
-//                    DragBox(id = offsetData.id,
-//                        offsetX = offsetData.offsetX.value,
-//                        offsetY = offsetData.offsetY.value,
-//                        onMoveOffsetX = onMoveOffsetX,
-//                        onMoveOffsetY = onMoveOffsetY)
-//                }
-//            }
-
-            Surface(
-                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-                color = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .height((screenHeight.value * 0.15F + stateValue).dp)
+        },
+        frontLayerContent = {
+            Log.i("testing", "${LocalWindowInsets.current.navigationBars.top.dp}")
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                Column(
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .scrollable(
-                            orientation = Orientation.Vertical,
-                            state = state,
-                            reverseDirection = true,
-                        )
-                ) {
-                    Text(
-                        text = "Menu",
-                        style = MaterialTheme.typography.h6,
-                        fontSize = 34.sp,
-                        modifier = Modifier.padding(start = 16.dp, end =16.dp, top = 16.dp)
+                Text(
+                    text = "Menu",
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                    fontFamily = fontsBold,
+                    fontSize = 34.sp,
+                )
+                SubText(
+                    text = "Write the menu description here",
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 8.dp,
+                        bottom = 16.dp
                     )
-                    Text(
-                        text = "Write the menu description here",
-                        color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-                        style = MaterialTheme.typography.caption,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
-                    )
-                    MainNumber(text = menu[0], numberText = numberText, onEditNumber = onEditNumber)
-                    MainMenuItem(text = menu[1], onClick = onMembersClick)
-                    MainMenuItem(text = menu[2], onClick = onSizeClick)
-                    Spacer(modifier = Modifier.size(16.dp))
-                }
+                )
+                MainMenuSeats(
+                    text = menu[0],
+                    seatTotal = offsetList.size.toString(),
+                    imageVector = Icons.Outlined.EventSeat
+                )
+                MainMenuItem(
+                    text = menu[1],
+                    onClick = onMembersClick,
+                    imageVector = Icons.Outlined.GroupAdd
+                )
+                MainMenuItem(
+                    text = menu[2],
+                    onClick = onSizeClick,
+                    imageVector = Icons.Outlined.Settings
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+                LotteryRestButton(
+                    onShuffleList = onShuffleList,
+                    onLotteryClick = onLotteryClick,
+                    onRemoveAllObject = onRemoveAllObject,
+                    membersList = membersList.map { it.name.value },
+                    offsetList = offsetList
+                )
+            }
+        },
+        peekHeight = 172.dp,
+        headerHeight = 110.dp,
+        backLayerBackgroundColor = MaterialTheme.colors.primary,
+        backLayerContentColor = MaterialTheme.colors.primaryVariant,
+        frontLayerBackgroundColor = MaterialTheme.colors.onPrimary,
+        frontLayerContentColor = MaterialTheme.colors.primary,
+        frontLayerScrimColor = Color.Unspecified,
+        frontLayerShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        frontLayerElevation = 8.dp,
+        modifier = Modifier.systemBarsPadding()
+    )
+}
+
+@Composable
+fun MainTopBar(
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+    onNavigateStart: () -> Unit,
+    onNavigateUsage: () -> Unit
+) {
+    TopAppBar(
+        elevation = 0.dp,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onNavigateStart) {
+                Icon(imageVector = Icons.Outlined.Home, contentDescription = "start button")
+            }
+            IconButton(onClick = onNavigateUsage) {
+                Icon(imageVector = Icons.Outlined.Info, contentDescription = "info button")
             }
         }
     }
 }
 
 @Composable
-fun MainMenuItem(text: String, onClick: () -> Unit) {
+fun MainMenuSeats(text: String, seatTotal: String, imageVector: ImageVector) {
+    Column {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(imageVector = imageVector, contentDescription = "members icon")
+                Text(
+                    text = text,
+                    fontFamily = fontsNormal,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+            Text(
+                text = seatTotal,
+                fontFamily = fontsNormal,
+                fontSize = 20.sp
+            )
+        }
+        MainDivider()
+    }
+}
+
+@Composable
+fun MainMenuItem(text: String, onClick: () -> Unit, imageVector: ImageVector) {
     Column(
         modifier = Modifier.clickable(onClick = onClick)
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.h4,
-            fontSize = 20.sp,
-            modifier = Modifier.padding(16.dp)
-        )
-        Divider(
-            color = MaterialTheme.colors.onPrimary.copy(alpha = ContentAlpha.medium),
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth()
-        )
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun MainNumber(text: String = "Number of seats", numberText: String, onEditNumber: (String) -> Unit) {
-    Column {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(16.dp)
         ) {
-            val keyboardController = LocalSoftwareKeyboardController.current
+            Icon(imageVector = imageVector, contentDescription = "members icon")
             Text(
                 text = text,
-                style = MaterialTheme.typography.h4,
+                fontFamily = fontsNormal,
                 fontSize = 20.sp,
-                modifier = Modifier.padding(16.dp)
-            )
-            TextField(
-                value = numberText,
-                onValueChange = { onEditNumber(it) },
-                placeholder = { MainPlaceholder(text = "Input text") },
-                textStyle = MaterialTheme.typography.h4.copy(
-                    fontSize = 26.sp,
-                    textAlign = TextAlign.End,
-                ),
-                colors =  TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.colors.primary,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    disabledTextColor = Color.Transparent
-                ),
-                singleLine = true,
-                keyboardActions = KeyboardActions(onDone = {
-                    keyboardController?.hide()
-                })
+                modifier = Modifier.padding(start = 16.dp)
             )
         }
-        Divider(
-            color = MaterialTheme.colors.onPrimary.copy(alpha = ContentAlpha.medium),
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth()
-        )
+        MainDivider()
     }
 }
 
 @Composable
-fun DragBox(
-    id: Int,
-    offsetX: Float,
-    offsetY: Float,
-    onMoveOffsetX: (Int, Float) -> Unit,
-    onMoveOffsetY: (Int, Float) -> Unit
+fun LotteryRestButton(
+    onShuffleList: () -> Unit,
+    onLotteryClick: () -> Unit,
+    onRemoveAllObject: () -> Unit,
+    membersList: List<String>,
+    offsetList: List<OffsetData>
 ) {
-    Box(
-        modifier = Modifier
-            .offset { IntOffset(x = offsetX.roundToInt(), y = offsetY.roundToInt()) }
-            .background(color = Color.Black)
-            .size(50.dp)
-            .pointerInput(Unit) {
-                detectDragGestures { change, dragAmount ->
-                    change.consumeAllChanges()
-                    onMoveOffsetX(id, dragAmount.x)
-                    onMoveOffsetY(id, dragAmount.y)
+    val openDialogMembers = remember { mutableStateOf(false) }
+    val openDialogObject = remember { mutableStateOf(false) }
+    val openDialogEmpty = remember { mutableStateOf(false) }
+    val openDialogReset = remember { mutableStateOf(false) }
+    if (openDialogMembers.value) {
+        SAAlertDialog(
+            title = "All members have not registered yet.",
+            text = "Fill in the fields for all members",
+            openDialog = openDialogMembers
+        )
+    }
+    if (openDialogObject.value) {
+        SAAlertDialog(
+            title = "The number of seats does not match the number of members",
+            text = "Edit the number of seats and the number of members again.",
+            openDialog = openDialogObject
+        )
+    }
+    if (openDialogEmpty.value) {
+        SAAlertDialog(
+            title = "No seats are assigned",
+            text = "It is necessary to arrange the seats.",
+            openDialog = openDialogEmpty
+        )
+    }
+    if (openDialogReset.value) {
+        SAResetDialog(
+            title = "Warning",
+            text = "Is it okay to delete seats?",
+            openDialog = openDialogReset,
+            onRemoveAllObject = onRemoveAllObject
+        )
+    }
+    SubText(
+        text = "Once you have entered all the information, please click on the lottery button." +
+                " There is also a reset button.",
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
+    )
+    MainButton(
+        text = "Lottery",
+        color = MaterialTheme.colors.primary,
+        onClick = {
+            if (offsetList.isNullOrEmpty()) {
+                openDialogEmpty.value = true
+            } else if (membersList.contains("") || membersList.isNullOrEmpty()) {
+                openDialogMembers.value = true
+            } else if (membersList.size != offsetList.size || offsetList.isNullOrEmpty()) {
+                openDialogObject.value = true
+            } else {
+                onShuffleList()
+                onLotteryClick()
+            }
+        }
+    )
+    MainButton(
+        text = "Reset",
+        color = MaterialTheme.colors.onPrimary,
+        contentColor = MaterialTheme.colors.primary,
+        borderColor = MaterialTheme.colors.primary,
+        onClick = { openDialogReset.value = true }
+    )
+    Spacer(modifier = Modifier.size(16.dp))
+}
+
+@Composable
+fun SAResetDialog(
+    title: String,
+    text: String,
+    primaryColor: Color = MaterialTheme.colors.primary,
+    onPrimaryColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
+    openDialog: MutableState<Boolean>,
+    onRemoveAllObject: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = { },
+        backgroundColor = primaryColor,
+        shape = RoundedCornerShape(10.dp),
+        title = {
+            Text(
+                text = title,
+                color = onPrimaryColor,
+                fontSize = 20.sp,
+                fontFamily = fontsBold
+            )
+        },
+        text = {
+            Text(
+                text = text,
+                fontFamily = fontsNormal,
+                fontSize = 15.sp,
+                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+            )
+        },
+        confirmButton = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text(
+                        text = "Cancel",
+                        color = onPrimaryColor,
+                        fontFamily = fontsBold,
+                        fontSize = 20.sp
+                    )
+                }
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                        onRemoveAllObject()
+                    }
+                ) {
+                    Text(
+                        text = "OK",
+                        color = onPrimaryColor,
+                        fontFamily = fontsBold,
+                        fontSize = 20.sp
+                    )
                 }
             }
-                .background(color = MaterialTheme.colors.primary.copy())
-        )
-
+        },
+        dismissButton = null
+    )
 }
