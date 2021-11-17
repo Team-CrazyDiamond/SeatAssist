@@ -261,11 +261,13 @@ fun CommonTopBar(
     contentColor: Color = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
 ) {
     com.google.accompanist.insets.ui.TopAppBar(
-        title = { Text(
-            text = title,
-            fontFamily = fontsBold,
-            color = contentColor
-        ) },
+        title = {
+            Text(
+                text = title,
+                fontFamily = fontsBold,
+                color = contentColor
+            )
+        },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
                 Icon(

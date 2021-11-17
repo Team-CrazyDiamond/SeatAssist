@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.PersonAddAlt
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -28,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.MembersData
 import com.example.seatassist.ui.components.*
 import com.google.accompanist.insets.systemBarsPadding
-import com.google.accompanist.systemuicontroller.SystemUiController
 
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
@@ -98,12 +96,14 @@ fun MembersScreen(
 @Composable
 fun MembersTopBar(id: Int, onAddMemberOne: (Int, String) -> Unit, onNavigationClick: () -> Unit) {
     TopAppBar(
-        title = { Text(
-            text = "Members",
-            color = MaterialTheme.colors.onPrimary,
-            fontSize = 20.sp,
-            fontFamily = fontsBold
-        ) },
+        title = {
+            Text(
+                text = "Members",
+                color = MaterialTheme.colors.onPrimary,
+                fontSize = 20.sp,
+                fontFamily = fontsBold
+            )
+        },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
                 Icon(
@@ -228,7 +228,8 @@ fun MembersNumber(
         MembersNumberItem(
             numberTextNoneVisi = numberTextNoneVisi,
             onEditNumber = onEditNumber,
-            onNumberNavigation = onNumberNavigation)
+            onNumberNavigation = onNumberNavigation
+        )
         MainButton(
             text = "Completion",
             color = MaterialTheme.colors.primary,

@@ -2,7 +2,6 @@ package com.example.seatassist.ui.custom
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.rememberTransformableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.example.seatassist.data.ScaleData
 import com.example.seatassist.ui.components.*
 import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -43,17 +41,20 @@ fun CustomScreen(
     onEditColor: (Color) -> Unit
 ) {
     Scaffold(
-        topBar = { CommonTopBar(
-            title = "Custom",
-            onNavigationClick = onNavigationClick,
-            backgroundColor = MaterialTheme.colors.onPrimary,
-            contentColor = MaterialTheme.colors.primary
-        ) },
+        topBar = {
+            CommonTopBar(
+                title = "Custom",
+                onNavigationClick = onNavigationClick,
+                backgroundColor = MaterialTheme.colors.onPrimary,
+                contentColor = MaterialTheme.colors.primary
+            )
+        },
         bottomBar = {
             Spacer(
                 Modifier
                     .navigationBarsHeight()
-                    .fillMaxWidth())
+                    .fillMaxWidth()
+            )
         },
         backgroundColor = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary
